@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Play', system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -18,10 +18,24 @@
 body {
   margin: 0;
   min-height: 100vh;
+  font-family: 'Play', sans-serif;
 }
 
 #root {
   min-height: 100vh;
+}
+
+/* Font classes for easy use */
+.font-display {
+  font-family: 'Press Start 2P', cursive;
+}
+
+.font-body {
+  font-family: 'Play', sans-serif;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
 }
 
 @layer utilities {
@@ -35,6 +49,39 @@ body {
     }
     100% {
       transform: translateY(100vh);
+    }
+  }
+
+  @keyframes tv-static {
+    0%, 100% {
+      background-position: 0% 0%;
+    }
+    10% {
+      background-position: -5% -10%;
+    }
+    20% {
+      background-position: -15% 5%;
+    }
+    30% {
+      background-position: 7% -25%;
+    }
+    40% {
+      background-position: 20% 25%;
+    }
+    50% {
+      background-position: -25% 10%;
+    }
+    60% {
+      background-position: 15% -15%;
+    }
+    70% {
+      background-position: 0% 15%;
+    }
+    80% {
+      background-position: 25% -5%;
+    }
+    90% {
+      background-position: -10% 20%;
     }
   }
 }

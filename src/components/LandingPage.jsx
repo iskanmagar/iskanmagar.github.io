@@ -1,78 +1,182 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
+import EpisodesSection from "./episodes/EpisodesSection";
+import BlogSection from "./blog/BlogSection";
+import BlogModal from "./blog/BlogModal";
+import AboutSection from "./AboutSection";
+import GuestsSection from "./GuestsSection";
 
 export default function LandingPage() {
-    return (
-        <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex flex-col items-center justify-center text-white relative overflow-hidden">
-            {/* Animated scanlines effect */}
-            <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[length:100%_2px] animate-pulse opacity-20" />
+    const [glitchText, setGlitchText] = useState("SIGNAL LOST");
+    const [selectedBlog, setSelectedBlog] = useState(null);
 
+    return (
+        <>
             {/* Hero Section */}
-            <section className="relative w-full flex flex-col items-center justify-center py-20 px-4">
-                {/* Retro TV Circle */}
+            <section id="hero" className="relative w-full min-h-screen flex flex-col items-center justify-center py-20 px-4 z-10">
+                {/* Retro TV Circle - Classic Broadcasting Design */}
                 <motion.div
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 1, ease: "easeOut" }}
-                    className="relative w-[320px] h-[320px] rounded-full overflow-hidden border-4 border-white shadow-[0_0_60px_rgba(255,255,255,0.2)] bg-black"
+                    className="relative w-[380px] h-[380px] sm:w-[420px] sm:h-[420px]"
                 >
-                    {/* Color bars */}
-                    <div className="grid grid-cols-6 h-1/3">
-                        <div className="bg-yellow-400" />
-                        <div className="bg-cyan-400" />
-                        <div className="bg-green-400" />
-                        <div className="bg-pink-500" />
-                        <div className="bg-red-600" />
-                        <div className="bg-blue-700" />
-                    </div>
+                    {/* Outer TV Frame */}
+                    <div className="absolute inset-0 rounded-full border-[12px] border-gray-800 shadow-[0_10px_50px_rgba(0,0,0,0.8)]">
+                        {/* Inner Screen Bezel */}
+                        <div className="absolute inset-0 rounded-full border-4 border-gray-600 overflow-hidden bg-black">
+                            {/* Screen Content */}
+                            <div className="relative w-full h-full">
+                                {/* CRT Screen Curvature Effect */}
+                                <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/40 pointer-events-none" />
 
-                    {/* Logo */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <img src="/logo.svg" alt="Logo" className="h-24 w-24 invert" />
-                    </div>
+                                {/* Color bars with vintage effect */}
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.3, duration: 0.8 }}
+                                    className="absolute top-0 left-0 right-0 grid grid-cols-7 h-[28%] relative"
+                                >
+                                    <div className="bg-gray-200" />
+                                    <div className="bg-yellow-400" />
+                                    <div className="bg-cyan-400" />
+                                    <div className="bg-green-500" />
+                                    <div className="bg-pink-500" />
+                                    <div className="bg-red-500" />
+                                    <div className="bg-blue-600" />
+                                    {/* Horizontal scanlines on bars */}
+                                    <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent_0px,transparent_1px,rgba(0,0,0,0.15)_1px,rgba(0,0,0,0.15)_2px)]" />
+                                </motion.div>
 
-                    {/* TV Info Display */}
-                    <div className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center pb-3">
-                        <div className="h-2 w-full bg-black border-t border-white" />
-                        <div className="flex justify-between w-full px-6 text-xs text-gray-300">
-                            <span>04:20</span>
-                            <span>xx-xx-25</span>
-                        </div>
-                        <div className="mt-2">
-                            <p className="text-sm tracking-widest font-mono">ΣΟΚολCοΧοΟ</p>
-                        </div>
-                        <div className="mt-2 text-gray-300">
-                            {/* <p className="font-semibold">#1</p> */}
-                            <p className="uppercase tracking-widest text-sm">Iskanmagar</p>
+                                {/* Logo - Properly centered vertically */}
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.6, duration: 0.8 }}
+                                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"
+                                >
+                                    <img src="/logo.svg" alt="Logo" className="h-24 w-24 sm:h-28 sm:w-28 invert" />
+                                </motion.div>
+
+                                {/* TV Info Display - Bottom Panel */}
+                                <div className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center pb-4 pt-6">
+                                    <div className="flex justify-between w-full px-8 text-xs text-gray-400 font-mono mb-3">
+                                        <motion.span
+                                            className="bg-red-900/30 px-2 py-1 border border-red-600/60 flex items-center gap-1"
+                                            animate={{ opacity: [1, 0.7, 1] }}
+                                            transition={{ duration: 1.5, repeat: Infinity }}
+                                        >
+                                            <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                                            REC
+                                        </motion.span>
+                                        <span className="bg-green-900/20 px-2 py-1 border border-green-600/40">ON AIR</span>
+                                    </div>
+
+                                    <div className="flex justify-between w-full px-8 text-[10px] text-gray-500 font-mono mb-3">
+                                        <span>CH: 01</span>
+                                        <span>11-12-25</span>
+                                        <motion.span
+                                            animate={{ opacity: [1, 0.5, 1] }}
+                                            transition={{ duration: 1, repeat: Infinity }}
+                                        >
+                                            04:20
+                                        </motion.span>
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <p className="text-base tracking-[0.3em] font-mono text-gray-300 font-semibold">ΣΟΚολCοΧοΟ</p>
+                                        <p className="uppercase tracking-[0.25em] text-sm font-display font-bold text-white">Iskanmagar</p>
+                                        <p className="text-[10px] text-gray-600 tracking-wider font-mono">BROADCAST SIGNAL</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </motion.div>
 
-                {/* Overlay Text */}
+                {/* Signal Lost Text Effect */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5, duration: 1 }}
-                    className="text-center mt-10"
+                    transition={{ delay: 0.8, duration: 1 }}
+                    className="text-center mt-12 max-w-4xl"
                 >
-                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 bg-gradient-to-r from-cyan-400 via-pink-500 to-yellow-400 text-transparent bg-clip-text">
-                        Welcome to Iskanmagar
-                    </h1>
-                    <p className="text-gray-400 max-w-xl mx-auto text-base sm:text-lg leading-relaxed px-4">
-                        Broadcasting creativity, color, and digital nostalgia. Tune in for a retro-futuristic experience.
-                    </p>
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="mt-8 bg-white text-black px-8 py-3 rounded-full font-semibold shadow-lg hover:bg-gray-200 transition"
-                        aria-label="Enter the broadcast"
-                    >
-                        Enter Broadcast
-                    </motion.button>
+                    {/* Main Heading with Press Start 2P */}
+                    <div className="mb-8">
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-display text-white leading-relaxed">
+                            SIGNAL LOST
+                        </h1>
+                    </div>
+
+                    {/* Broadcast Standby Message */}
+                    <div className="mb-8">
+                        <p className="text-base sm:text-lg font-mono text-gray-400 tracking-widest mb-4">
+                            PLEASE STAND BY
+                        </p>
+                        <p className="text-lg sm:text-xl text-gray-300 font-body max-w-2xl mx-auto leading-relaxed">
+                            While we try to find our identity...
+                        </p>
+                    </div>
+
+                    <div className="mb-10">
+                        <p className="text-sm font-mono text-cyan-400 tracking-wider border-t border-b border-gray-800 py-3 inline-block px-8">
+                            BROADCASTING: CREATIVITY · COLOR · NOSTALGIA
+                        </p>
+                    </div>
+
+                    {/* Simple Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-10">
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="bg-cyan-400 text-black px-12 py-4 font-mono font-bold hover:bg-cyan-300 transition-colors min-w-[280px]"
+                            aria-label="Enter the broadcast"
+                        >
+                            <span className="flex items-center justify-center gap-3 tracking-wider">
+                                ENTER BROADCAST
+                            </span>
+                        </motion.button>
+
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="bg-black text-pink-400 px-12 py-4 font-mono font-semibold border-2 border-pink-400 hover:bg-pink-400 hover:text-black transition-all min-w-[280px]"
+                            aria-label="Learn more"
+                        >
+                            <span className="flex items-center justify-center gap-2 tracking-wider">
+                                TUNE IN
+                            </span>
+                        </motion.button>
+                    </div>
+
+                    {/* Technical Status Bar */}
+                    <div className="mt-12 inline-flex flex-wrap items-center justify-center gap-4 text-xs font-mono text-gray-600 border border-gray-900 px-6 py-3 bg-black/80">
+                        <span className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-red-500" />
+                            <span className="text-red-400">SIGNAL: WEAK</span>
+                        </span>
+                        <span className="text-gray-800">|</span>
+                        <span className="text-gray-500">QUALITY: 240p</span>
+                        <span className="text-gray-800">|</span>
+                        <span className="text-yellow-600">STATUS: SEARCHING</span>
+                    </div>
                 </motion.div>
             </section>
 
-            {/* Subtle vignette effect */}
-            <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_60%,rgba(0,0,0,0.8))]" />
-        </div>
+            {/* Episodes Section */}
+            <EpisodesSection />
+
+            {/* Blog Section */}
+            <BlogSection onSelectBlog={setSelectedBlog} />
+
+            {/* Previous Guests */}
+            <GuestsSection />
+
+            {/* About / Manifesto */}
+            <AboutSection />
+
+            {/* Blog Modal */}
+            <BlogModal blog={selectedBlog} onClose={() => setSelectedBlog(null)} />
+        </>
     );
 }
