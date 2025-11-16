@@ -3,24 +3,26 @@ import { Link } from "react-router-dom";
 
 export default function Footer() {
     return (
-        <footer className="relative py-8 px-4 border-t-2 border-gray-800 bg-black">
+        <footer className="relative z-20 py-8 px-4 border-t-2 border-cyan-400/30 bg-black/95 backdrop-blur-sm">
             <div className="max-w-7xl mx-auto">
                 <div className="grid gap-6 md:grid-cols-[auto_1fr_auto] items-center">
                     {/* Logo */}
                     <Link to="/" className="flex items-center gap-3 group">
-                        <div className="w-10 h-10 border-2 border-cyan-400 flex items-center justify-center group-hover:border-pink-400 transition-colors">
-                            <span className="text-lg font-mono font-bold text-cyan-400 group-hover:text-pink-400 transition-colors">
-                                IK
-                            </span>
+                        <div className="w-10 h-10 border-2 border-cyan-400 bg-black flex items-center justify-center group-hover:border-pink-400 transition-colors p-1.5">
+                            <img
+                                src="/logo.svg"
+                                alt="Iskanmagar Logo"
+                                className="w-full h-full object-contain brightness-0 invert group-hover:opacity-80 transition-opacity"
+                            />
                         </div>
-                        <span className="font-mono text-sm text-gray-400 hidden sm:block">
-                            ISKANMAGAR
+                        <span className="font-display text-sm text-gray-300 hidden sm:block uppercase tracking-wider">
+                            Iskanmagar
                         </span>
                     </Link>
 
                     {/* Purpose */}
                     <div className="text-center md:text-left">
-                        <p className="text-xs sm:text-sm text-gray-400 font-mono leading-relaxed max-w-2xl mx-auto md:mx-0">
+                        <p className="text-xs sm:text-sm text-gray-300 font-mono leading-relaxed max-w-2xl mx-auto md:mx-0">
                             A broadcast from underrepresented, multilingual communities building at the edge of technology, creativity, and community.
                         </p>
                     </div>

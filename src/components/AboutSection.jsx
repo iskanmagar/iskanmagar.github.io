@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 import hosts from "../data/hosts.json";
 
 export default function AboutSection() {
+    const [expandedHost, setExpandedHost] = useState(null);
+
     return (
         <div className="relative min-h-screen bg-black">
             {/* Hero Section */}
@@ -149,63 +152,93 @@ export default function AboutSection() {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                                    className="border-2 border-gray-800 bg-black p-6 sm:p-8 hover:border-cyan-400/50 transition-colors group"
+                                    className="border-2 border-gray-800 bg-black hover:border-cyan-400/50 transition-colors group overflow-hidden"
                                 >
-                                    <div className="mb-4">
-                                        <div className="w-12 h-12 sm:w-16 sm:h-16 border-2 border-cyan-400 flex items-center justify-center mb-4 group-hover:border-pink-400 transition-colors">
-                                            <span className="text-2xl sm:text-3xl font-mono text-cyan-400 group-hover:text-pink-400 transition-colors">
-                                                {host.name.split(' ').map(n => n[0]).join('')}
-                                            </span>
+                                    {/* Host Image */}
+                                    <div className="relative w-full h-64 sm:h-72 overflow-hidden bg-gradient-to-br from-cyan-900/20 to-pink-900/20">
+                                        <img
+                                            src="/taha-host.jpg"
+                                            alt={host.name}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+
+                                        {/* Name overlay on image */}
+                                        <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
+                                            <h3 className="text-xl sm:text-2xl font-mono font-bold text-white mb-1 break-words">
+                                                {host.name}
+                                            </h3>
+                                            <p className="text-xs sm:text-sm font-mono text-pink-400 uppercase tracking-wide">
+                                                {host.title}
+                                            </p>
                                         </div>
-                                        <h3 className="text-xl sm:text-2xl font-mono font-bold text-white mb-2 break-words">
-                                            {host.name}
-                                        </h3>
-                                        <p className="text-xs sm:text-sm font-mono text-pink-400 mb-1 uppercase tracking-wide">
-                                            {host.title}
-                                        </p>
-                                        <p className="text-xs font-mono text-gray-500">
-                                            {host.role}
-                                        </p>
                                     </div>
 
-                                    <p className="text-sm text-gray-300 leading-relaxed mb-4">
-                                        {host.bio}
-                                    </p>
+                                    {/* Card Content */}
+                                    <div className="p-6 sm:p-8">
+                                        <p className="text-xs font-mono text-gray-500 mb-4">
+                                            {host.role}
+                                        </p>
 
-                                    {host.tags && (
-                                        <div className="flex flex-wrap gap-2 mb-4">
-                                            {host.tags.map((tag) => (
-                                                <span
-                                                    key={tag}
-                                                    className="text-[10px] font-mono px-2 py-1 border border-cyan-400/40 text-cyan-300 tracking-wide"
+                                        <p className="text-sm text-gray-300 leading-relaxed mb-4">
+                                            {expandedHost === index ? (
+                                                <>
+                                                    {host.bio}
+                                                    <br /><br />
+                                                    <span className="text-cyan-300">
+                                                        AI Google Developer Expert passionate about democratizing AI and ML education.
+                                                        Previous founder of ML Nomads, a global research community bringing together
+                                                        researchers and practitioners from underrepresented regions. Currently building
+                                                        azetta.ai to make AI accessible and practical for builders everywhere.
+                                                    </span>
+                                                </>
+                                            ) : (
+                                                host.bio
+                                            )}
+                                        </p>
+
+                                        <button
+                                            onClick={() => setExpandedHost(expandedHost === index ? null : index)}
+                                            className="text-xs font-mono text-cyan-400 hover:text-cyan-300 transition-colors mb-4 flex items-center gap-2"
+                                        >
+                                            {expandedHost === index ? '▼ Show Less' : '► Show More'}
+                                        </button>
+
+                                        {host.tags && (
+                                            <div className="flex flex-wrap gap-2 mb-4">
+                                                {host.tags.map((tag) => (
+                                                    <span
+                                                        key={tag}
+                                                        className="text-[10px] font-mono px-2 py-1 border border-cyan-400/40 text-cyan-300 tracking-wide"
+                                                    >
+                                                        {tag}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        <div className="flex items-center gap-4 text-xs font-mono pt-4 border-t border-gray-800">
+                                            {host.website && (
+                                                <a
+                                                    href={host.website}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="text-cyan-400 hover:text-cyan-300 underline underline-offset-4 break-all"
                                                 >
-                                                    {tag}
-                                                </span>
-                                            ))}
+                                                    Website
+                                                </a>
+                                            )}
+                                            {host.twitter && (
+                                                <a
+                                                    href={host.twitter}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="text-gray-500 hover:text-white transition-colors"
+                                                >
+                                                    𝕏
+                                                </a>
+                                            )}
                                         </div>
-                                    )}
-
-                                    <div className="flex items-center gap-4 text-xs font-mono pt-4 border-t border-gray-800">
-                                        {host.website && (
-                                            <a
-                                                href={host.website}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="text-cyan-400 hover:text-cyan-300 underline underline-offset-4 break-all"
-                                            >
-                                                Website
-                                            </a>
-                                        )}
-                                        {host.twitter && (
-                                            <a
-                                                href={host.twitter}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="text-gray-500 hover:text-white transition-colors"
-                                            >
-                                                𝕏
-                                            </a>
-                                        )}
                                     </div>
                                 </motion.div>
                             ))}

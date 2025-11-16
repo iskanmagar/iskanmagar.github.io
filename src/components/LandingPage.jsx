@@ -125,27 +125,19 @@ export default function LandingPage() {
 
                     {/* Simple Buttons */}
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-10">
-                        <motion.button
+                        <motion.a
+                            href="https://youtube.com/@iskanmagar"
+                            target="_blank"
+                            rel="noreferrer"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="bg-cyan-400 text-black px-12 py-4 font-mono font-bold hover:bg-cyan-300 transition-colors min-w-[280px]"
-                            aria-label="Enter the broadcast"
+                            className="bg-cyan-400 text-black px-12 py-4 font-mono font-bold hover:bg-cyan-300 transition-colors min-w-[280px] text-center"
+                            aria-label="Watch on YouTube"
                         >
                             <span className="flex items-center justify-center gap-3 tracking-wider">
-                                ENTER BROADCAST
+                                ▶ WATCH ON YOUTUBE
                             </span>
-                        </motion.button>
-
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="bg-black text-pink-400 px-12 py-4 font-mono font-semibold border-2 border-pink-400 hover:bg-pink-400 hover:text-black transition-all min-w-[280px]"
-                            aria-label="Learn more"
-                        >
-                            <span className="flex items-center justify-center gap-2 tracking-wider">
-                                TUNE IN
-                            </span>
-                        </motion.button>
+                        </motion.a>
                     </div>
 
                     {/* Technical Status Bar */}

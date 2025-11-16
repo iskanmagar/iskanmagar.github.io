@@ -11,8 +11,8 @@ export default function Layout({ children }) {
 
             <Footer />
 
-            {/* Enhanced vignette effect */}
-            <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_40%,rgba(0,0,0,0.9))]" />
+            {/* Enhanced vignette effect - doesn't cover footer */}
+            <div className="absolute top-0 left-0 right-0 bottom-24 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_40%,rgba(0,0,0,0.8))]" />
         </div>
     );
 }
