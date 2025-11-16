@@ -3,7 +3,6 @@ import { useState } from "react";
 import EpisodesSection from "./episodes/EpisodesSection";
 import BlogSection from "./blog/BlogSection";
 import BlogModal from "./blog/BlogModal";
-import AboutSection from "./AboutSection";
 import GuestsSection from "./GuestsSection";
 
 export default function LandingPage() {
@@ -84,7 +83,7 @@ export default function LandingPage() {
                                     </div>
 
                                     <div className="space-y-1">
-                                        <p className="text-base tracking-[0.3em] font-mono text-gray-300 font-semibold">ΣΟΚολCοΧοΟ</p>
+                                        <p className="text-base tracking-[0.3em] font-mono text-gray-300 font-semibold">ⵉⵙⴽⴰⵏⵎⴰⴳⴰⵔ</p>
                                         <p className="uppercase tracking-[0.25em] text-sm font-display font-bold text-white">Iskanmagar</p>
                                         <p className="text-[10px] text-gray-600 tracking-wider font-mono">BROADCAST SIGNAL</p>
                                     </div>
@@ -171,9 +170,6 @@ export default function LandingPage() {
 
             {/* Previous Guests */}
             <GuestsSection />
-
-            {/* About / Manifesto */}
-            <AboutSection />
 
             {/* Blog Modal */}
             <BlogModal blog={selectedBlog} onClose={() => setSelectedBlog(null)} />
