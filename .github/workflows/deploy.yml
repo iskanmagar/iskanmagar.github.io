@@ -34,11 +34,61 @@ jobs:
           node-version: 20
           cache: 'npm'
       
+      - name: Cache Vite build
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules/.vite
+            dist
+          key: ${{ runner.os }}-vite-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('src/**') }}
+          restore-keys: |
+            ${{ runner.os }}-vite-${{ hashFiles('**/package-lock.json') }}-
+            ${{ runner.os }}-vite-
+      
       - name: Install dependencies
         run: npm ci
       
-      - name: Build
+      - name: Build with optimizations
         run: npm run build
+        env:
+          NODE_ENV: production
+      
+      - name: Generate 404.html for SPA routing
+        run: cp dist/index.html dist/404.html
+      
+      - name: Generate robots.txt
+        run: |
+          cat > dist/robots.txt << EOF
+          User-agent: *
+          Allow: /
+          Sitemap: https://iskanmagar.github.io/sitemap.xml
+          EOF
+      
+      - name: Generate sitemap.xml
+        run: |
+          cat > dist/sitemap.xml << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+            <url>
+              <loc>https://iskanmagar.github.io/</loc>
+              <lastmod>$(date -u +%Y-%m-%d)</lastmod>
+              <changefreq>weekly</changefreq>
+              <priority>1.0</priority>
+            </url>
+            <url>
+              <loc>https://iskanmagar.github.io/about</loc>
+              <lastmod>$(date -u +%Y-%m-%d)</lastmod>
+              <changefreq>weekly</changefreq>
+              <priority>0.8</priority>
+            </url>
+            <url>
+              <loc>https://iskanmagar.github.io/guests</loc>
+              <lastmod>$(date -u +%Y-%m-%d)</lastmod>
+              <changefreq>weekly</changefreq>
+              <priority>0.8</priority>
+            </url>
+          </urlset>
+          EOF
       
       - name: Setup Pages
         uses: actions/configure-pages@v4

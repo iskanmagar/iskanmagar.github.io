@@ -2,96 +2,217 @@ import { motion } from "framer-motion";
 import hosts from "../data/hosts.json";
 
 export default function AboutSection() {
-    const primaryHost = hosts[0];
-
     return (
-        <section id="about" className="relative py-20 px-4 border-t-2 border-gray-800 bg-black/80">
-            <div className="max-w-7xl mx-auto grid gap-12 lg:grid-cols-[3fr_2fr] items-start">
-                {/* Manifesto */}
-                <motion.div
-                    initial={{ opacity: 0, x: -40 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                >
-                    <h2 className="text-3xl sm:text-4xl font-mono font-bold text-white mb-4 flex items-center gap-3">
-                        <span className="text-cyan-400">▌</span>
-                        <span>ABOUT ISKANMAGAR</span>
-                    </h2>
-                    <p className="text-xs font-mono text-gray-500 tracking-widest mb-6">[ MANIFESTO ]</p>
-
-                    <div className="space-y-5 text-sm sm:text-base text-gray-300 leading-relaxed max-w-2xl">
-                        <p>
-                            Iskanmagar is a broadcast for those who grew up far from the center, but close to possibility. For multilingual kids who learned to switch languages before they learned to switch tabs. For builders from underrepresented places who know that talent is everywhere, even when opportunity is not.
-                        </p>
-                        <p>
-                            This space exists to prove that a weak signal can still reach new skies. We share stories of people who turn scarcity into creativity, community into infrastructure, and late-night experiments into real-world transmissions.
-                        </p>
-                        <p>
-                            Here, building in public is not a strategy—it is survival. We document the journey so others can follow different, faster paths. We celebrate those who translate local experience into global impact, and who refuse to let geography decide their ceiling.
-                        </p>
-                        <p className="text-pink-300 font-mono font-semibold">
-                            iskanmagar init . The broadcast is a reminder: we are here, we are building, and we are not done.
-                        </p>
-                    </div>
-                </motion.div>
-
-                {/* Host Card */}
-                {primaryHost && (
-                    <motion.aside
-                        initial={{ opacity: 0, x: 40 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        className="border border-gray-800 bg-black p-6 sm:p-8 shadow-[0_0_40px_rgba(0,0,0,0.6)]"
+        <div className="relative min-h-screen bg-black">
+            {/* Hero Section */}
+            <section className="relative py-16 sm:py-24 px-4 border-b-2 border-gray-800">
+                <div className="max-w-5xl mx-auto">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                        className="text-center mb-12 sm:mb-16"
                     >
-                        <p className="text-xs font-mono text-gray-500 tracking-widest mb-3">[ HOST ]</p>
-                        <h3 className="text-2xl font-mono font-bold text-white mb-2">{primaryHost.name}</h3>
-                        <p className="text-xs font-mono text-cyan-400 mb-1 uppercase tracking-wide">
-                            {primaryHost.title}
+                        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-mono font-bold text-white mb-4 sm:mb-6">
+                            <span className="text-cyan-400">▌</span> ABOUT ISKANMAGAR
+                        </h1>
+                        <p className="text-sm sm:text-base font-mono text-gray-500 tracking-widest">
+                            [ BROADCAST FROM THE EDGE ]
                         </p>
-                        <p className="text-xs font-mono text-gray-500 mb-4">
-                            AI Google Developer Expert · Community Builder
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* Manifesto Section */}
+            <section className="relative py-16 sm:py-24 px-4 border-b-2 border-gray-800 bg-black/80">
+                <div className="max-w-4xl mx-auto">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                    >
+                        <h2 className="text-2xl sm:text-3xl font-mono font-bold text-pink-400 mb-6 sm:mb-8 flex items-center gap-3">
+                            <span>►</span> THE MANIFESTO
+                        </h2>
+
+                        <div className="space-y-6 sm:space-y-8 text-sm sm:text-base text-gray-300 leading-relaxed">
+                            <p className="text-base sm:text-lg text-white font-semibold">
+                                Where we start is not where we are meant to stop.
+                            </p>
+
+                            <p>
+                                Iskanmagar is a broadcast for those who grew up far from the center, but close to possibility.
+                                For multilingual kids who learned to switch languages before they learned to switch tabs.
+                                For builders from underrepresented places who know that <span className="text-pink-300 font-semibold">talent is everywhere</span>,
+                                even when opportunity is not.
+                            </p>
+
+                            <div className="border-l-4 border-cyan-400 pl-4 sm:pl-6 py-2 bg-cyan-400/5">
+                                <p className="italic text-cyan-100">
+                                    "In places the maps label as 'underrepresented,' we know them as home.
+                                    Streets where accents are heavy, passports are weak, and yet the dreams are louder than any border."
+                                </p>
+                            </div>
+
+                            <p>
+                                This space exists to prove that a weak signal can still reach new skies. We share stories of people
+                                who turn <span className="text-pink-300">scarcity into creativity</span>, community into infrastructure,
+                                and late-night experiments into real-world transmissions.
+                            </p>
+
+                            <h3 className="text-xl sm:text-2xl font-mono font-bold text-white mt-8 sm:mt-12 mb-4 sm:mb-6">
+                                Our Solutions
+                            </h3>
+
+                            <div className="grid gap-4 sm:gap-6">
+                                <div className="border border-gray-800 p-4 sm:p-6 bg-black">
+                                    <h4 className="text-cyan-400 font-mono font-bold mb-2 text-sm sm:text-base">→ Share what we learn</h4>
+                                    <p className="text-sm sm:text-base">
+                                        Knowledge stops being locked to a few and starts flowing between many.
+                                        A meetup, a group chat, a shared repo—community changes everything.
+                                    </p>
+                                </div>
+
+                                <div className="border border-gray-800 p-4 sm:p-6 bg-black">
+                                    <h4 className="text-cyan-400 font-mono font-bold mb-2 text-sm sm:text-base">→ Treat the journey as experiments</h4>
+                                    <p className="text-sm sm:text-base">
+                                        Not a single test we can fail once. Every attempt is practice.
+                                        We ship small things, learn in public, and keep iterating.
+                                    </p>
+                                </div>
+
+                                <div className="border border-gray-800 p-4 sm:p-6 bg-black">
+                                    <h4 className="text-cyan-400 font-mono font-bold mb-2 text-sm sm:text-base">→ Ask for guidance</h4>
+                                    <p className="text-sm sm:text-base">
+                                        More than feels comfortable. Send the email. Write the message.
+                                        The worst answer is silence; the best outcome is a shift in trajectory.
+                                    </p>
+                                </div>
+
+                                <div className="border border-gray-800 p-4 sm:p-6 bg-black">
+                                    <h4 className="text-cyan-400 font-mono font-bold mb-2 text-sm sm:text-base">→ Document the journey</h4>
+                                    <p className="text-sm sm:text-base">
+                                        Build in public. Show the work, not just the launch.
+                                        Someone behind you will find your small step huge.
+                                    </p>
+                                </div>
+
+                                <div className="border border-gray-800 p-4 sm:p-6 bg-black">
+                                    <h4 className="text-cyan-400 font-mono font-bold mb-2 text-sm sm:text-base">→ Build a rhythm, not a rush</h4>
+                                    <p className="text-sm sm:text-base">
+                                        Ten consistent steps beat one giant leap that never happens.
+                                        Daily progress compounds into breakthrough results.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="bg-gradient-to-r from-pink-500/10 to-cyan-500/10 border-2 border-pink-400 p-6 sm:p-8 mt-8 sm:mt-12">
+                                <p className="text-base sm:text-lg text-pink-300 font-mono font-bold mb-3 sm:mb-4">
+                                    iskanmagar init .
+                                </p>
+                                <p className="text-sm sm:text-base">
+                                    The broadcast is a reminder: <span className="text-white font-semibold">we are here, we are building, and we are not done.</span>
+                                </p>
+                                <p className="text-sm sm:text-base mt-3 sm:mt-4 text-cyan-100">
+                                    This is not just our beginning. It is an invitation to everyone who recognizes this reality—who juggles
+                                    languages and expectations, who watches conferences at 2 a.m., who builds with second-hand tools but
+                                    first-class ambition.
+                                </p>
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* Hosts Section */}
+            <section className="relative py-16 sm:py-24 px-4 bg-black/80">
+                <div className="max-w-6xl mx-auto">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                    >
+                        <h2 className="text-2xl sm:text-3xl font-mono font-bold text-white mb-3 sm:mb-4 flex items-center gap-3">
+                            <span className="text-cyan-400">►</span> THE HOSTS
+                        </h2>
+                        <p className="text-xs sm:text-sm font-mono text-gray-500 tracking-widest mb-8 sm:mb-12">
+                            [ TRANSMISSION OPERATORS ]
                         </p>
 
-                        <p className="text-sm text-gray-300 leading-relaxed mb-4">
-                            {primaryHost.bio}
-                        </p>
-
-                        <div className="flex flex-wrap gap-2 mb-4">
-                            {primaryHost.tags?.map((tag) => (
-                                <span
-                                    key={tag}
-                                    className="text-[10px] font-mono px-2 py-1 border border-pink-400/40 text-pink-300 tracking-wide"
+                        <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
+                            {hosts.map((host, index) => (
+                                <motion.div
+                                    key={host.name}
+                                    initial={{ opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                                    className="border-2 border-gray-800 bg-black p-6 sm:p-8 hover:border-cyan-400/50 transition-colors group"
                                 >
-                                    {tag}
-                                </span>
+                                    <div className="mb-4">
+                                        <div className="w-12 h-12 sm:w-16 sm:h-16 border-2 border-cyan-400 flex items-center justify-center mb-4 group-hover:border-pink-400 transition-colors">
+                                            <span className="text-2xl sm:text-3xl font-mono text-cyan-400 group-hover:text-pink-400 transition-colors">
+                                                {host.name.split(' ').map(n => n[0]).join('')}
+                                            </span>
+                                        </div>
+                                        <h3 className="text-xl sm:text-2xl font-mono font-bold text-white mb-2 break-words">
+                                            {host.name}
+                                        </h3>
+                                        <p className="text-xs sm:text-sm font-mono text-pink-400 mb-1 uppercase tracking-wide">
+                                            {host.title}
+                                        </p>
+                                        <p className="text-xs font-mono text-gray-500">
+                                            {host.role}
+                                        </p>
+                                    </div>
+
+                                    <p className="text-sm text-gray-300 leading-relaxed mb-4">
+                                        {host.bio}
+                                    </p>
+
+                                    {host.tags && (
+                                        <div className="flex flex-wrap gap-2 mb-4">
+                                            {host.tags.map((tag) => (
+                                                <span
+                                                    key={tag}
+                                                    className="text-[10px] font-mono px-2 py-1 border border-cyan-400/40 text-cyan-300 tracking-wide"
+                                                >
+                                                    {tag}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    <div className="flex items-center gap-4 text-xs font-mono pt-4 border-t border-gray-800">
+                                        {host.website && (
+                                            <a
+                                                href={host.website}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="text-cyan-400 hover:text-cyan-300 underline underline-offset-4 break-all"
+                                            >
+                                                Website
+                                            </a>
+                                        )}
+                                        {host.twitter && (
+                                            <a
+                                                href={host.twitter}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="text-gray-500 hover:text-white transition-colors"
+                                            >
+                                                𝕏
+                                            </a>
+                                        )}
+                                    </div>
+                                </motion.div>
                             ))}
                         </div>
-
-                        <div className="flex items-center gap-4 text-xs font-mono">
-                            {primaryHost.website && (
-                                <a
-                                    href={primaryHost.website}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="text-cyan-400 hover:text-cyan-300 underline underline-offset-4"
-                                >
-                                    tahabouhsine.com
-                                </a>
-                            )}
-                            {primaryHost.twitter && (
-                                <a
-                                    href={primaryHost.twitter}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="text-gray-500 hover:text-white"
-                                >
-                                    𝕏
-                                </a>
-                            )}
-                        </div>
-                    </motion.aside>
-                )}
-            </div>
-        </section>
+                    </motion.div>
+                </div>
+            </section>
+        </div>
     );
 }

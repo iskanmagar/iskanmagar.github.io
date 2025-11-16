@@ -15,7 +15,7 @@ export default function BlogModal({ blog, onClose }) {
                 initial={{ scale: 0.9, y: 50 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.9, y: 50 }}
-                className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-black border-2 border-pink-400 p-8 md:p-12"
+                className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-black border-2 border-pink-400 p-5 sm:p-8 md:p-12"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Close Button */}
@@ -28,8 +28,8 @@ export default function BlogModal({ blog, onClose }) {
                 </button>
 
                 {/* Header */}
-                <div className="mb-8 pb-6 border-b-2 border-gray-800">
-                    <div className="flex items-center gap-3 text-xs font-mono text-gray-500 mb-4">
+                <div className="mb-6 sm:mb-8 pb-4 sm:pb-6 border-b-2 border-gray-800">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs font-mono text-gray-500 mb-3 sm:mb-4">
                         {blog.category && (
                             <span className="border border-pink-400/50 text-pink-400 px-2 py-1">
                                 {blog.category}
@@ -37,20 +37,20 @@ export default function BlogModal({ blog, onClose }) {
                         )}
                         {blog.date && <span>{blog.date}</span>}
                     </div>
-                    <h1 className="text-3xl md:text-4xl font-mono font-bold text-white mb-0">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-mono font-bold text-white mb-0 break-words">
                         {blog.title}
                     </h1>
                 </div>
 
                 {/* Content */}
-                <div className="text-gray-300 leading-relaxed space-y-6">
+                <div className="text-sm sm:text-base text-gray-300 leading-relaxed space-y-4 sm:space-y-6">
                     {blog.content.split("\n").map((line, index) => {
                         // Headings
                         if (line.startsWith("# ")) {
                             return (
                                 <h1
                                     key={index}
-                                    className="text-3xl font-mono font-bold text-white mt-8 mb-4"
+                                    className="text-2xl sm:text-3xl font-mono font-bold text-white mt-6 sm:mt-8 mb-3 sm:mb-4 break-words"
                                 >
                                     {line.replace("# ", "")}
                                 </h1>
@@ -102,10 +102,10 @@ export default function BlogModal({ blog, onClose }) {
                 </div>
 
                 {/* Footer */}
-                <div className="mt-8 pt-6 border-t-2 border-gray-800 text-center">
+                <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t-2 border-gray-800 text-center">
                     <button
                         onClick={onClose}
-                        className="bg-pink-400 text-black px-8 py-3 font-mono font-bold hover:bg-pink-300 transition-colors"
+                        className="bg-pink-400 text-black px-6 sm:px-8 py-3 font-mono font-bold hover:bg-pink-300 transition-colors text-sm sm:text-base"
                     >
                         [ CLOSE TRANSMISSION ]
                     </button>
