@@ -11,10 +11,16 @@ const isActive = (href: string) =>
     <!-- Wordmark -->
     <a href="/" class="group flex items-center gap-3" aria-label="Iskanmagar home">
       <span
-        class="flex h-9 w-9 items-center justify-center border border-signal/70 font-display text-[9px] text-signal transition-colors group-hover:border-magenta group-hover:text-magenta"
+        class="flex h-10 w-10 items-center justify-center border border-signal/70 bg-ink p-1.5 transition-all group-hover:border-magenta group-hover:shadow-glow-sm"
         aria-hidden="true"
       >
-        TV
+        <img
+          src="/logo.svg"
+          alt=""
+          width="28"
+          height="28"
+          class="h-full w-full brightness-0 invert transition-transform duration-300 group-hover:scale-110"
+        />
       </span>
       <span class="leading-none">
         <span class="block font-heading text-base font-bold tracking-wide text-white">ISKANMAGAR</span>

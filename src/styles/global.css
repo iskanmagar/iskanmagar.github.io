@@ -149,6 +149,12 @@
   .text-balance {
     text-wrap: balance;
   }
+  /* CRT chromatic aberration — magenta/cyan fringing on display type */
+  .text-crt {
+    text-shadow:
+      -1.5px 0 rgba(255, 79, 163, 0.45),
+      1.5px 0 rgba(46, 230, 214, 0.45);
+  }
   .bg-grid {
     background-image: theme('backgroundImage.grid-faint');
     background-size: 46px 46px;

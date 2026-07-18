@@ -87,12 +87,17 @@ export default {
           '60%': { transform: 'translate(-3%,4%)' },
           '80%': { transform: 'translate(4%,-2%)' },
         },
+        ticker: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
       },
       animation: {
         scanline: 'scanline 8s linear infinite',
         flicker: 'flicker 7s linear infinite',
         blink: 'blink 1.4s steps(1) infinite',
         grain: 'grain-shift 6s steps(4) infinite',
+        ticker: 'ticker 42s linear infinite',
       },
     },
   },
