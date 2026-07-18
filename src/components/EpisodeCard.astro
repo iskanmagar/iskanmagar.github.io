@@ -1,26 +1,13 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { youtubeThumb } from '@/lib/youtube';
 
 interface Props {
   episode: CollectionEntry<'episodes'>['data'];
 }
 const { episode } = Astro.props;
 
-function youtubeId(url?: string): string | null {
-  if (!url) return null;
-  const patterns = [
-    /[?&]v=([^&]+)/, // watch?v=ID
-    /youtu\.be\/([^?&/]+)/, // youtu.be/ID
-    /\/(?:embed|shorts|live)\/([^?&/]+)/, // /embed|shorts|live/ID
-  ];
-  for (const p of patterns) {
-    const m = url.match(p);
-    if (m) return m[1];
-  }
-  return null;
-}
-const id = youtubeId(episode.youtubeUrl);
-const thumb = id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : null;
+const thumb = youtubeThumb(episode.youtubeUrl);
 const Wrapper = episode.youtubeUrl ? 'a' : 'div';
 ---
 
