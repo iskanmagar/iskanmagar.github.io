@@ -12,16 +12,22 @@ const channels = episodes.map((e) => ({
 ---
 
 <div class="tv-stage boot boot-3" data-retro-tv>
-  <div class="tv-3d">
-    <!-- Rabbit ears -->
-    <div class="antenna" aria-hidden="true">
-      <span class="ear ear-l"></span>
-      <span class="ear ear-r"></span>
-      <span class="antenna-base"></span>
-    </div>
+  <div class="tv-rig">
+    <div class="tv-sway">
+      <div class="tv-box">
+        <!-- Rabbit ears — planted on the top face -->
+        <div class="antenna" aria-hidden="true">
+          <span class="ear ear-l"></span>
+          <span class="ear ear-r"></span>
+          <span class="antenna-base"></span>
+        </div>
 
-    <!-- Walnut cabinet -->
-    <div class="cabinet">
+        <!-- Cabinet depth: side + top wood panels folded into Z -->
+        <span class="panel-right" aria-hidden="true"></span>
+        <span class="panel-top" aria-hidden="true"></span>
+
+        <!-- Walnut cabinet (front face) -->
+        <div class="cabinet">
       <div class="face">
         <!-- CRT -->
         <div class="screen-frame">
@@ -83,8 +89,10 @@ const channels = episodes.map((e) => ({
       </div>
     </div>
 
-    <!-- Feet + floor shadow -->
-    <div class="feet" aria-hidden="true"><span></span><span></span></div>
+        <!-- Feet -->
+        <div class="feet" aria-hidden="true"><span></span><span></span></div>
+      </div>
+    </div>
   </div>
   <div class="floor-shadow" aria-hidden="true"></div>
 
@@ -184,19 +192,84 @@ const channels = episodes.map((e) => ({
     margin-inline: auto;
     perspective: 1300px;
   }
-  .tv-3d {
-    transform: rotateY(-8deg) rotateX(1.5deg);
+  /* ── 3D rig ──────────────────────────────────────────────
+     rig: viewing pose (eases forward on hover, never flat)
+     sway: gentle idle oscillation (paused while interacting)
+     box: the cuboid — front face + folded side/top panels   */
+  .tv-rig {
     transform-style: preserve-3d;
-    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    transform: rotateY(-24deg) rotateX(8deg);
+    transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
   }
-  .tv-stage:hover .tv-3d {
-    transform: rotateY(0deg) rotateX(0deg);
+  .tv-stage:hover .tv-rig {
+    transform: rotateY(-10deg) rotateX(4deg);
+  }
+  .tv-sway {
+    transform-style: preserve-3d;
+    animation: tv-sway 9s ease-in-out infinite alternate;
+  }
+  .tv-stage:hover .tv-sway {
+    animation-play-state: paused;
+  }
+  @keyframes tv-sway {
+    from {
+      transform: rotateY(-3deg);
+    }
+    to {
+      transform: rotateY(3deg);
+    }
+  }
+  .tv-box {
+    position: relative;
+    transform-style: preserve-3d;
+  }
+
+  /* Folded wood panels give the cabinet real depth */
+  .panel-right {
+    position: absolute;
+    top: 76px; /* below antenna row */
+    bottom: 22px; /* above feet */
+    left: 100%;
+    width: 110px;
+    transform-origin: left center;
+    transform: rotateY(90deg);
+    border-radius: 0 14px 14px 0;
+    background:
+      repeating-linear-gradient(
+        178deg,
+        rgba(0, 0, 0, 0) 0 8px,
+        rgba(0, 0, 0, 0.22) 8px 10px,
+        rgba(255, 255, 255, 0.015) 10px 12px
+      ),
+      linear-gradient(90deg, #241811, #382513 55%, #2a1b0e);
+    box-shadow: 0 0 26px rgba(0, 0, 0, 0.45) inset;
+  }
+  .panel-top {
+    position: absolute;
+    top: 74px; /* cabinet's top edge (antenna row above) */
+    left: 0;
+    right: 0;
+    height: 110px;
+    margin-top: -110px;
+    transform-origin: center bottom;
+    transform: rotateX(90deg);
+    border-radius: 14px 14px 0 0;
+    background:
+      repeating-linear-gradient(
+        88deg,
+        rgba(0, 0, 0, 0) 0 9px,
+        rgba(0, 0, 0, 0.16) 9px 11px,
+        rgba(255, 255, 255, 0.03) 11px 13px
+      ),
+      linear-gradient(180deg, #6b4a2c, #533723 60%, #46301d);
+    box-shadow: 0 0 22px rgba(0, 0, 0, 0.3) inset;
   }
 
   /* ── Antenna ─────────────────────────────────────────── */
   .antenna {
     position: relative;
     height: 74px;
+    transform: translateZ(-55px); /* planted mid-way along the top face */
   }
   .ear {
     position: absolute;
@@ -258,6 +331,7 @@ const channels = episodes.map((e) => ({
   .face {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 92px;
+    align-items: center;
     gap: 12px;
     border-radius: 10px;
     padding: 14px;
@@ -604,11 +678,12 @@ const channels = episodes.map((e) => ({
     clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%);
   }
   .floor-shadow {
-    height: 18px;
-    margin: -4px auto 0;
-    width: 82%;
+    height: 22px;
+    margin: -6px auto 0;
+    width: 92%;
     border-radius: 50%;
-    background: radial-gradient(50% 100% at 50% 50%, rgba(0, 0, 0, 0.55), transparent 70%);
+    transform: translateX(-3%);
+    background: radial-gradient(50% 100% at 50% 50%, rgba(0, 0, 0, 0.6), transparent 70%);
   }
 
   .caption {
@@ -627,10 +702,25 @@ const channels = episodes.map((e) => ({
     color: #545c66;
   }
 
+  /* Narrow screens: shallower pose so the box's projection fits the viewport */
+  @media (max-width: 640px) {
+    .tv-stage {
+      max-width: 340px;
+    }
+    .tv-rig {
+      transform: rotateY(-14deg) rotateX(6deg);
+    }
+    .tv-stage:hover .tv-rig {
+      transform: rotateY(-8deg) rotateX(3deg);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .tv-3d,
-    .tv-stage:hover .tv-3d {
-      transform: none;
+    /* Keep the static 3D pose (not motion) — just stop sway and easing */
+    .tv-sway {
+      animation: none;
+    }
+    .tv-rig {
       transition: none;
     }
   }
