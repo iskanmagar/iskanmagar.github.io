@@ -1,0 +1,27 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+const { post } = Astro.props;
+const href = `/blog/${post.slug}`;
+---
+
+<article class="panel panel-hover group border-l-2 border-l-magenta/40 p-6 hover:border-l-magenta">
+  <a href={href} class="block">
+    <div class="mb-3 flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
+      <h3 class="font-heading text-xl font-bold text-white transition-colors group-hover:text-magenta-bright">
+        {post.data.title}
+      </h3>
+      <div class="flex items-center gap-3 font-mono text-xs">
+        <span class="border border-magenta/50 px-2 py-1 text-magenta-bright">{post.data.category}</span>
+        <span class="text-gray-500">{post.data.date}</span>
+      </div>
+    </div>
+    <p class="text-sm leading-relaxed text-gray-400">{post.data.preview}</p>
+    <span class="mt-4 inline-flex items-center gap-2 font-mono text-sm text-magenta-bright transition-all group-hover:gap-3">
+      Read more <span aria-hidden="true">→</span>
+    </span>
+  </a>
+</article>

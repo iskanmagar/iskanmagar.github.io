@@ -1,0 +1,68 @@
+---
+import '@fontsource/press-start-2p';
+import '@fontsource-variable/space-grotesk';
+import '@fontsource-variable/jetbrains-mono';
+import '@/styles/global.css';
+
+import Seo from '@/components/seo/Seo.astro';
+import Navbar from '@/components/Navbar.astro';
+import Footer from '@/components/Footer.astro';
+import { SITE } from '@/site.config';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  publishedTime?: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const props = Astro.props;
+---
+
+<!doctype html>
+<html lang={SITE.lang} class="scroll-pt-24">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="mask-icon" href="/favicon.svg" color={SITE.themeColor} />
+    <meta name="theme-color" content={SITE.themeColor} />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content={SITE.shortName} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${SITE.shortName} — Transmissions`}
+      href="/rss.xml"
+    />
+    <Seo {...props} />
+  </head>
+  <body class="relative min-h-screen overflow-x-hidden">
+    <!-- Ambient CRT texture: faint grid + drifting scanline (decorative, reduced-motion safe) -->
+    <div class="pointer-events-none fixed inset-0 -z-10 bg-grid opacity-60" aria-hidden="true"></div>
+    <div
+      class="pointer-events-none fixed inset-0 -z-10 bg-scanlines opacity-[0.35]"
+      aria-hidden="true"
+    >
+    </div>
+
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-signal focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:text-ink"
+    >
+      Skip to content
+    </a>
+
+    <Navbar />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

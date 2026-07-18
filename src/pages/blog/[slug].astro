@@ -1,0 +1,136 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import { SITE } from '@/site.config';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('blog')).filter((p) => !p.data.draft);
+  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+const { post } = Astro.props;
+const { Content } = await post.render();
+const url = `${SITE.url}/blog/${post.slug}/`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.data.title,
+    description: post.data.preview,
+    datePublished: post.data.publishedAt.toISOString(),
+    image: `${SITE.url}${SITE.defaultOgImage}`,
+    author: { '@type': 'Person', name: post.data.author, url: SITE.author.url },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE.name,
+      logo: { '@type': 'ImageObject', url: `${SITE.url}/logo.svg` },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE.url}/` },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE.url}/blog/` },
+      { '@type': 'ListItem', position: 3, name: post.data.title, item: url },
+    ],
+  },
+];
+---
+
+<Base
+  title={post.data.title}
+  description={post.data.preview}
+  canonicalPath={`/blog/${post.slug}`}
+  type="article"
+  publishedTime={post.data.publishedAt.toISOString()}
+  jsonLd={jsonLd}
+>
+  <article class="mx-auto max-w-3xl px-4 py-20">
+    <nav aria-label="Breadcrumb" class="mb-8 font-mono text-xs text-gray-500">
+      <a href="/" class="hover:text-signal">Home</a>
+      <span class="mx-2" aria-hidden="true">/</span>
+      <a href="/blog" class="hover:text-signal">Blog</a>
+    </nav>
+
+    <header class="mb-10 border-b border-ink-line pb-8">
+      <div class="mb-4 flex items-center gap-3 font-mono text-xs">
+        <span class="border border-magenta/50 px-2 py-1 text-magenta-bright">{post.data.category}</span>
+        <time datetime={post.data.publishedAt.toISOString()} class="text-gray-500">{post.data.date}</time>
+      </div>
+      <h1 class="text-balance font-heading text-3xl font-bold leading-tight text-white sm:text-5xl">
+        {post.data.title}
+      </h1>
+      <p class="mt-4 font-mono text-sm text-gray-400">By {post.data.author}</p>
+    </header>
+
+    <div
+      class="prose-broadcast max-w-none text-gray-300"
+    >
+      <Content />
+    </div>
+
+    <footer class="mt-14 border-t border-ink-line pt-8">
+      <a href="/blog" class="btn-ghost">← Back to transmissions</a>
+    </footer>
+  </article>
+</Base>
+
+<style is:global>
+  /* Scoped typography for Markdown-rendered blog content */
+  .prose-broadcast {
+    line-height: 1.75;
+  }
+  .prose-broadcast > * + * {
+    margin-top: 1.35em;
+  }
+  .prose-broadcast h1,
+  .prose-broadcast h2,
+  .prose-broadcast h3 {
+    font-family: '"Space Grotesk Variable"', sans-serif;
+    color: #fff;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-top: 2em;
+  }
+  .prose-broadcast h2 {
+    font-size: 1.6rem;
+  }
+  .prose-broadcast h3 {
+    font-size: 1.3rem;
+  }
+  .prose-broadcast strong {
+    color: #5ff5e8;
+  }
+  .prose-broadcast a {
+    color: #2ee6d6;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .prose-broadcast ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  .prose-broadcast li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-top: 0.5em;
+  }
+  .prose-broadcast li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: #2ee6d6;
+  }
+  .prose-broadcast blockquote {
+    border-left: 3px solid #2ee6d6;
+    padding-left: 1.25rem;
+    font-style: italic;
+    color: #a7f3ee;
+  }
+</style>

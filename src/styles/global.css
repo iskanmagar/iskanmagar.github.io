@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: theme('colors.ink.DEFAULT');
+  }
+
+  body {
+    @apply bg-ink text-gray-200 font-body antialiased;
+    margin: 0;
+    min-height: 100vh;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Accessible focus ring across the site */
+  :where(a, button, [tabindex]):focus-visible {
+    outline: 2px solid theme('colors.signal.DEFAULT');
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: theme('colors.signal.DEFAULT');
+    color: theme('colors.ink.DEFAULT');
+  }
+}
+
+@layer components {
+  /* Broadcast panel primitive — unifies episode / guest / blog cards */
+  .panel {
+    @apply relative border border-ink-line bg-ink-panel/70 shadow-panel transition-colors duration-200;
+  }
+  .panel-hover {
+    @apply hover:border-signal/60 hover:shadow-glow;
+  }
+
+  /* Section eyebrow label, e.g. [ RECORDED TRANSMISSIONS ] */
+  .eyebrow {
+    @apply font-mono text-xs uppercase tracking-[0.35em] text-gray-500;
+  }
+
+  .btn-signal {
+    @apply inline-flex items-center justify-center gap-2 bg-signal px-8 py-4 font-mono text-sm font-bold uppercase tracking-widest text-ink transition-colors hover:bg-signal-bright;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 border border-signal/60 px-8 py-4 font-mono text-sm font-bold uppercase tracking-widest text-signal transition-colors hover:bg-signal hover:text-ink;
+  }
+
+  /* Corner registration ticks for panels */
+  .ticks::before,
+  .ticks::after {
+    content: '';
+    @apply pointer-events-none absolute h-2 w-2 border-signal/50;
+  }
+  .ticks::before {
+    @apply left-0 top-0 border-l border-t;
+  }
+  .ticks::after {
+    @apply bottom-0 right-0 border-b border-r;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .bg-grid {
+    background-image: theme('backgroundImage.grid-faint');
+    background-size: 44px 44px;
+  }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,123 @@
+---
+import { NAV, SOCIAL } from '@/site.config';
+
+const current = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? current === '/' : current.startsWith(href);
+---
+
+<header class="sticky top-0 z-50 border-b border-signal/20 bg-ink/85 backdrop-blur" data-nav>
+  <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5">
+    <!-- Wordmark -->
+    <a href="/" class="group flex items-center gap-3" aria-label="Iskanmagar home">
+      <span
+        class="flex h-9 w-9 items-center justify-center border border-signal/70 font-display text-[9px] text-signal transition-colors group-hover:border-magenta group-hover:text-magenta"
+        aria-hidden="true"
+      >
+        TV
+      </span>
+      <span class="leading-none">
+        <span class="block font-heading text-base font-bold tracking-wide text-white">ISKANMAGAR</span>
+        <span class="block font-mono text-[8px] tracking-[0.35em] text-signal">BROADCAST NETWORK</span>
+      </span>
+    </a>
+
+    <!-- Desktop nav -->
+    <ul class="hidden items-center gap-7 font-mono text-sm md:flex">
+      {
+        NAV.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class:list={[
+                'uppercase tracking-widest transition-colors',
+                isActive(item.href)
+                  ? 'text-signal border-b-2 border-signal pb-0.5'
+                  : 'text-gray-400 hover:text-signal',
+              ]}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="flex items-center gap-4">
+      <a
+        href={SOCIAL.youtube}
+        target="_blank"
+        rel="noreferrer"
+        class="hidden text-gray-400 transition-colors hover:text-signal md:inline-flex"
+        aria-label="Iskanmagar on YouTube"
+      >
+        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
+          ></path>
+        </svg>
+      </a>
+
+      <!-- Mobile toggle (progressive enhancement — vanilla JS, no framework) -->
+      <button
+        type="button"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        aria-label="Toggle menu"
+        class="flex h-10 w-10 flex-col items-center justify-center gap-1.5 border border-signal/60 text-signal transition-colors hover:bg-signal/10 md:hidden"
+      >
+        <span class="h-0.5 w-5 bg-signal transition-transform" data-bar="1"></span>
+        <span class="h-0.5 w-5 bg-signal transition-opacity" data-bar="2"></span>
+        <span class="h-0.5 w-5 bg-signal transition-transform" data-bar="3"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile panel -->
+  <div
+    id="mobile-nav"
+    hidden
+    class="border-t border-signal/30 bg-ink/95 backdrop-blur md:hidden"
+  >
+    <ul class="flex flex-col gap-1 px-4 py-4 font-mono text-sm">
+      {
+        NAV.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class:list={[
+                'block py-2 uppercase tracking-widest transition-colors',
+                isActive(item.href) ? 'text-signal' : 'text-gray-400 hover:text-signal',
+              ]}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</header>
+
+<script>
+  // ~15 lines of vanilla JS instead of a 136KB React runtime for one toggle.
+  const toggle = document.querySelector('[data-menu-toggle]');
+  const panel = document.getElementById('mobile-nav');
+  const [b1, b2, b3] = ['1', '2', '3'].map((n) =>
+    document.querySelector(`[data-bar="${n}"]`)
+  ) as HTMLElement[];
+
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    if (panel) panel.hidden = open;
+    b1?.classList.toggle('translate-y-2', !open);
+    b1?.classList.toggle('rotate-45', !open);
+    b2?.classList.toggle('opacity-0', !open);
+    b3?.classList.toggle('-translate-y-2', !open);
+    b3?.classList.toggle('-rotate-45', !open);
+  });
+</script>

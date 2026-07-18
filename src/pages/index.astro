@@ -1,0 +1,89 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import Hero from '@/components/Hero.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import EpisodeCard from '@/components/EpisodeCard.astro';
+import GuestCard from '@/components/GuestCard.astro';
+import BlogCard from '@/components/BlogCard.astro';
+import { SITE, SOCIAL } from '@/site.config';
+
+const episodes = (await getCollection('episodes')).sort((a, b) => b.data.order - a.data.order);
+const guests = await getCollection('guests');
+const posts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE.name,
+    alternateName: SITE.shortName,
+    url: SITE.url,
+    description: SITE.description,
+    inLanguage: SITE.lang,
+    publisher: {
+      '@type': 'Organization',
+      name: SITE.name,
+      logo: { '@type': 'ImageObject', url: `${SITE.url}/logo.svg` },
+      sameAs: [SOCIAL.youtube, SOCIAL.twitter],
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'PodcastSeries',
+    name: 'Iskanmagar Podcast',
+    description:
+      'Stories from multilingual, underrepresented builders creating opportunities and learning in public.',
+    url: SITE.url,
+    webFeed: `${SITE.url}/rss.xml`,
+    author: {
+      '@type': 'Person',
+      name: SITE.author.name,
+      jobTitle: 'Host & Co-founder of azetta.ai',
+      url: SITE.author.url,
+    },
+  },
+];
+---
+
+<Base jsonLd={jsonLd}>
+  <Hero />
+
+  <!-- Episodes -->
+  <section id="episodes" class="border-t border-signal/20 px-4 py-20">
+    <div class="mx-auto max-w-7xl">
+      <SectionHeading title="Archived Episodes" eyebrow="Recorded Transmissions" />
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {episodes.map((e) => <EpisodeCard episode={e.data} />)}
+      </div>
+      <div class="mt-10">
+        <a href="/episodes" class="btn-ghost"> All episodes → </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog -->
+  <section id="blog" class="border-t border-magenta/20 px-4 py-20">
+    <div class="mx-auto max-w-7xl">
+      <SectionHeading title="Transmission Log" eyebrow="Written Broadcasts" marker="■" accent="magenta" />
+      <div class="space-y-6">
+        {posts.slice(0, 4).map((post) => <BlogCard post={post} />)}
+      </div>
+      <div class="mt-10">
+        <a href="/blog" class="btn-ghost"> All posts → </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Guests -->
+  <section id="guests" class="border-t border-signal/20 px-4 py-20">
+    <div class="mx-auto max-w-7xl">
+      <SectionHeading title="Featured Guests" eyebrow="Featured Signals" marker="◎" />
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {guests.map((g) => <GuestCard guest={g.data} />)}
+      </div>
+    </div>
+  </section>
+</Base>

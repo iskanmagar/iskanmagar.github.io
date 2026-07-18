@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import EpisodeCard from '@/components/EpisodeCard.astro';
+import { SITE } from '@/site.config';
+
+const episodes = (await getCollection('episodes')).sort((a, b) => b.data.order - a.data.order);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'PodcastSeries',
+  name: 'Iskanmagar Podcast',
+  url: `${SITE.url}/episodes`,
+  webFeed: `${SITE.url}/rss.xml`,
+  numberOfEpisodes: episodes.length,
+};
+---
+
+<Base
+  title="Episodes"
+  description="Every recorded Iskanmagar transmission — conversations with builders from underrepresented, multilingual communities."
+  jsonLd={jsonLd}
+>
+  <div class="mx-auto max-w-7xl px-4 py-20">
+    <SectionHeading title="Episodes" eyebrow="Recorded Transmissions" as="h1" />
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {episodes.map((e) => <EpisodeCard episode={e.data} />)}
+    </div>
+  </div>
+</Base>

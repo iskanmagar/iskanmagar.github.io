@@ -1,33 +1,24 @@
 {
-    "name": "iskanmagar-portfolio",
-    "version": "1.0.0",
-    "private": true,
-    "type": "module",
-    "description": "Personal portfolio website for Iskanmagar",
-    "scripts": {
-        "dev": "vite",
-        "build": "vite build",
-        "preview": "vite preview",
-        "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
-    },
-    "dependencies": {
-        "framer-motion": "^10.16.16",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "react-router-dom": "^6.30.2"
-    },
-    "devDependencies": {
-        "@types/react": "^18.2.43",
-        "@types/react-dom": "^18.2.17",
-        "@vitejs/plugin-react": "^4.2.1",
-        "autoprefixer": "^10.4.16",
-        "eslint": "^8.55.0",
-        "eslint-plugin-react": "^7.33.2",
-        "eslint-plugin-react-hooks": "^4.6.0",
-        "eslint-plugin-react-refresh": "^0.4.5",
-        "postcss": "^8.4.32",
-        "tailwindcss": "^3.4.0",
-        "terser": "^5.44.1",
-        "vite": "^5.0.8"
-    }
+  "name": "iskanmagar",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Iskanmagar Broadcast Network — a broadcast from underrepresented, multilingual communities building at the edge of technology.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.0",
+    "@astrojs/rss": "^4.0.12",
+    "@astrojs/sitemap": "^3.4.0",
+    "@astrojs/tailwind": "^6.0.2",
+    "@fontsource-variable/jetbrains-mono": "^5.2.5",
+    "@fontsource-variable/space-grotesk": "^5.2.5",
+    "@fontsource/press-start-2p": "^5.2.5",
+    "astro": "^5.13.0",
+    "tailwindcss": "^3.4.17"
+  }
 }

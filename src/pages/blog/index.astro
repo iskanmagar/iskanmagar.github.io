@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import BlogCard from '@/components/BlogCard.astro';
+
+const posts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+---
+
+<Base
+  title="Blog"
+  description="Transmission log — written broadcasts on community, building in public, and creating at the edge of technology."
+  canonicalPath="/blog"
+>
+  <div class="mx-auto max-w-4xl px-4 py-20">
+    <SectionHeading title="Transmission Log" eyebrow="Written Broadcasts" marker="■" accent="magenta" as="h1" />
+    <div class="space-y-6">
+      {posts.map((post) => <BlogCard post={post} />)}
+    </div>
+  </div>
+</Base>
