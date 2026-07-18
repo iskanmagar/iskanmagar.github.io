@@ -155,6 +155,23 @@
       -1.5px 0 rgba(255, 79, 163, 0.45),
       1.5px 0 rgba(46, 230, 214, 0.45);
   }
+
+  /* CRT power-on: the screen snaps open from a bright horizontal line */
+  .crt-on {
+    transform-origin: center;
+    animation: crt-on 0.7s cubic-bezier(0.23, 1, 0.32, 1) 0.15s both;
+  }
+
+  /* Staged boot sequence for hero copy */
+  .boot {
+    animation: boot 0.6s ease-out both;
+  }
+  .boot-1 { animation-delay: 0.4s; }
+  .boot-2 { animation-delay: 0.55s; }
+  .boot-3 { animation-delay: 0.7s; }
+  .boot-4 { animation-delay: 0.85s; }
+  .boot-5 { animation-delay: 1s; }
+  .boot-6 { animation-delay: 1.15s; }
   .bg-grid {
     background-image: theme('backgroundImage.grid-faint');
     background-size: 46px 46px;
@@ -163,6 +180,32 @@
   .tifinagh-mark {
     @apply pointer-events-none select-none font-mono text-signal/70;
     letter-spacing: theme('letterSpacing.chyron');
+  }
+}
+
+@keyframes crt-on {
+  0% {
+    transform: scaleY(0.01);
+    filter: brightness(6);
+  }
+  45% {
+    transform: scaleY(0.03);
+    filter: brightness(4);
+  }
+  100% {
+    transform: scaleY(1);
+    filter: brightness(1);
+  }
+}
+
+@keyframes boot {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
