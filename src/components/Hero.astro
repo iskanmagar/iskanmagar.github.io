@@ -1,11 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
 import { SOCIAL } from '@/site.config';
-import { youtubeThumb } from '@/lib/youtube';
+import RetroTV from '@/components/RetroTV.astro';
 
 const episodes = (await getCollection('episodes')).sort((a, b) => b.data.order - a.data.order);
 const latest = episodes[0];
-const latestThumb = youtubeThumb(latest?.data.youtubeUrl);
 
 const tickerItems = [
   'ⵉⵙⴽⴰⵏⵎⴰⴳⴰⵔ',
@@ -87,91 +86,9 @@ const tickerItems = [
       </div>
     </div>
 
-    <!-- Side monitors -->
-    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-1">
-      <!-- MON 02 · NOW PLAYING -->
-      {
-        latest && (
-          <a
-            href={latest.data.youtubeUrl ?? '/episodes'}
-            {...latest.data.youtubeUrl ? { target: '_blank', rel: 'noreferrer' } : {}}
-            class="monitor group block transition-colors hover:border-signal/60"
-          >
-            <div class="monitor-label">
-              <span>Mon 02 · Now playing</span>
-              <span class="flex items-center gap-1.5 text-phosphor">
-                <span class="h-1.5 w-1.5 animate-blink rounded-full bg-phosphor" /> EP {latest.data.ep}
-              </span>
-            </div>
-            <div class="monitor-screen crt-on-2 mt-1.5">
-              <div class="relative aspect-video">
-                {latestThumb ? (
-                  <img
-                    src={latestThumb}
-                    alt={`Episode ${latest.data.ep}: ${latest.data.title}`}
-                    width="480"
-                    height="270"
-                    loading="eager"
-                    decoding="async"
-                    class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                ) : (
-                  <div class="flex h-full items-center justify-center text-3xl text-gray-700">▶</div>
-                )}
-                <div class="pointer-events-none absolute inset-0 bg-scanlines opacity-40" />
-                <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(115%_115%_at_50%_45%,transparent_60%,rgba(0,0,0,0.5)_100%)]" />
-                <div class="absolute inset-0 flex items-center justify-center bg-black/25 transition-colors group-hover:bg-black/5">
-                  <span class="text-4xl text-white/85 drop-shadow transition-transform group-hover:scale-110 group-hover:text-signal">
-                    ▶
-                  </span>
-                </div>
-              </div>
-              <div class="border-t border-ink-line bg-ink/90 px-3 py-2.5">
-                <p class="truncate font-mono text-[11px] uppercase tracking-wider text-gray-300 transition-colors group-hover:text-signal">
-                  EP {latest.data.ep} · {latest.data.title}
-                </p>
-                {latest.data.guest && <p class="truncate font-mono text-[10px] text-gray-500">{latest.data.guest}</p>}
-              </div>
-            </div>
-          </a>
-        )
-      }
-
-      <!-- MON 03 · STATION IDENT -->
-      <div class="monitor">
-        <div class="monitor-label">
-          <span>Mon 03 · Station ident</span>
-          <span class="text-gray-600">CH 01</span>
-        </div>
-        <div class="monitor-screen crt-on-3 mt-1.5">
-          <div class="relative flex min-h-[190px] flex-col items-center justify-center py-8 lg:min-h-[214px]">
-            <div class="pointer-events-none absolute inset-0 bg-scanlines opacity-40"></div>
-            <div class="pointer-events-none absolute inset-0 bg-grain opacity-[0.05] mix-blend-screen"></div>
-            <!-- SMPTE bars -->
-            <div class="absolute inset-x-0 top-0 grid h-9 grid-cols-7">
-              <div class="bg-gray-200"></div>
-              <div class="bg-amber"></div>
-              <div class="bg-signal"></div>
-              <div class="bg-phosphor"></div>
-              <div class="bg-magenta"></div>
-              <div class="bg-red-500"></div>
-              <div class="bg-blue-600"></div>
-            </div>
-            <img
-              src="/logo.svg"
-              alt=""
-              width="72"
-              height="72"
-              class="relative mt-6 h-16 w-16 brightness-0 invert"
-              aria-hidden="true"
-            />
-            <p class="relative mt-3 font-mono text-sm tracking-[0.3em] text-gray-300">ⵉⵙⴽⴰⵏⵎⴰⴳⴰⵔ</p>
-            <p class="relative font-heading text-xs font-bold uppercase tracking-[0.25em] text-white">
-              Iskanmagar
-            </p>
-          </div>
-        </div>
-      </div>
+    <!-- The set: a working vintage TV tuned to the network -->
+    <div class="flex items-center justify-center lg:justify-end">
+      <RetroTV />
     </div>
   </div>
 
