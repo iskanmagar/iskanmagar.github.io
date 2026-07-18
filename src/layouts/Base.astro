@@ -44,13 +44,19 @@ const props = Astro.props;
     <Seo {...props} />
   </head>
   <body class="relative min-h-screen overflow-x-hidden">
-    <!-- Ambient CRT texture: faint grid + drifting scanline (decorative, reduced-motion safe) -->
-    <div class="pointer-events-none fixed inset-0 -z-10 bg-grid opacity-60" aria-hidden="true"></div>
+    <!-- Ambient CRT texture: grid → grain → scanlines → edge vignette (decorative, reduced-motion safe) -->
+    <div class="pointer-events-none fixed inset-0 -z-10 bg-grid opacity-50" aria-hidden="true"></div>
     <div
-      class="pointer-events-none fixed inset-0 -z-10 bg-scanlines opacity-[0.35]"
+      class="pointer-events-none fixed inset-0 -z-10 animate-grain bg-grain opacity-[0.035] mix-blend-screen"
       aria-hidden="true"
     >
     </div>
+    <div
+      class="pointer-events-none fixed inset-0 -z-10 bg-scanlines opacity-30"
+      aria-hidden="true"
+    >
+    </div>
+    <div class="pointer-events-none fixed inset-0 -z-10 bg-vignette" aria-hidden="true"></div>
 
     <a
       href="#main"

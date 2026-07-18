@@ -55,7 +55,7 @@ const jsonLd = {
     <h1 class="font-heading text-4xl font-bold text-white sm:text-6xl">
       <span class="text-signal">▌</span> About Iskanmagar
     </h1>
-    <p class="eyebrow mt-4">[ Broadcast from the edge ]</p>
+    <p class="eyebrow mt-4 justify-center">Broadcast from the edge</p>
   </section>
 
   <!-- Manifesto -->
@@ -129,22 +129,18 @@ const jsonLd = {
                       sizes="(min-width: 1024px) 360px, (min-width: 768px) 45vw, 90vw"
                       class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-transparent" />
-                    <div class="absolute bottom-0 left-0 right-0 p-6">
-                      <h3 class="font-heading text-2xl font-bold text-white">{host.data.name}</h3>
-                      <p class="font-mono text-sm uppercase tracking-wide text-magenta-bright">
-                        {host.data.title}
-                      </p>
+                    <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-transparent" />
+                    <div class="chyron absolute bottom-5 left-5 right-5">
+                      <h3 class="chyron-name text-2xl">{host.data.name}</h3>
+                      <p class="chyron-role">{host.data.title}</p>
                     </div>
                   </div>
                 )}
                 <div class="p-6">
                   {!mod && (
-                    <div class="mb-4">
-                      <h3 class="font-heading text-2xl font-bold text-white">{host.data.name}</h3>
-                      <p class="font-mono text-sm uppercase tracking-wide text-magenta-bright">
-                        {host.data.title}
-                      </p>
+                    <div class="chyron mb-4">
+                      <h3 class="chyron-name text-2xl">{host.data.name}</h3>
+                      <p class="chyron-role">{host.data.title}</p>
                     </div>
                   )}
                   <p class="mb-4 font-mono text-xs text-gray-500">{host.data.role}</p>
@@ -169,8 +165,8 @@ const jsonLd = {
                   )}
                   <div class="mt-4 flex items-center gap-4 border-t border-ink-line pt-4 font-mono text-xs">
                     {host.data.website && (
-                      <a href={host.data.website} target="_blank" rel="noreferrer" class="text-signal underline underline-offset-4 hover:text-signal-bright">
-                        Website
+                      <a href={host.data.website} target="_blank" rel="noreferrer" class="link-underline">
+                        Website ↗
                       </a>
                     )}
                     {host.data.twitter && (
