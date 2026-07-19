@@ -1,11 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '@/layouts/Base.astro';
 import SectionHeading from '@/components/SectionHeading.astro';
 import EpisodeCard from '@/components/EpisodeCard.astro';
+import { getEpisodesLatestFirst } from '@/lib/episodes';
 import { SITE } from '@/site.config';
 
-const episodes = (await getCollection('episodes')).sort((a, b) => b.data.order - a.data.order);
+const episodes = await getEpisodesLatestFirst();
 
 const jsonLd = {
   '@context': 'https://schema.org',

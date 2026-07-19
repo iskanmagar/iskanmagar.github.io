@@ -1,12 +1,10 @@
 import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
+import { getPublishedPosts } from '@/lib/blog';
 import { SITE } from '@/site.config';
 import type { APIContext } from 'astro';
 
 export async function GET(context: APIContext) {
-  const posts = (await getCollection('blog'))
-    .filter((p) => !p.data.draft)
-    .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+  const posts = await getPublishedPosts();
 
   return rss({
     title: `${SITE.shortName} — Transmissions`,

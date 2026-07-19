@@ -7,6 +7,11 @@ export async function getEpisodes(): Promise<Episode[]> {
   return (await getCollection('episodes')).sort((a, b) => a.data.order - b.data.order);
 }
 
+/** Episodes newest-first, for archive listings. */
+export async function getEpisodesLatestFirst(): Promise<Episode[]> {
+  return (await getEpisodes()).reverse();
+}
+
 /** The most recently aired episode, if any. */
 export async function getLatestEpisode(): Promise<Episode | undefined> {
   const episodes = await getEpisodes();

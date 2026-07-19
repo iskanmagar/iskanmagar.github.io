@@ -11,14 +11,23 @@ const Tag = as;
 const markerClass = accent === 'magenta' ? 'text-magenta' : 'text-signal';
 ---
 
-<div class="mb-10">
-  {eyebrow && <p class="eyebrow mb-3">{eyebrow}</p>}
-  <Tag class="flex items-center gap-3 font-heading text-3xl font-bold tracking-tight text-white sm:text-4xl">
-    <span class={markerClass} aria-hidden="true">{marker}</span>
-    {title}
-  </Tag>
-  <div class="mt-4 flex items-center gap-3">
-    <span class="bar-divider max-w-[140px]"></span>
-    <span class="tifinagh-mark text-xs" aria-hidden="true">ⵉⵙⴽⴰⵏⵎⴰⴳⴰⵔ</span>
+<div class="mb-10 flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+  <div>
+    {eyebrow && <p class="eyebrow mb-3">{eyebrow}</p>}
+    <Tag class="flex items-center gap-3 font-heading text-3xl font-bold tracking-tight text-white sm:text-4xl">
+      <span class={markerClass} aria-hidden="true">{marker}</span>
+      {title}
+    </Tag>
+    <div class="mt-4 flex items-center gap-3">
+      <span class="bar-divider max-w-[140px]"></span>
+      <span class="tifinagh-mark text-xs" aria-hidden="true">ⵉⵙⴽⴰⵏⵎⴰⴳⴰⵔ</span>
+    </div>
   </div>
+  {
+    Astro.slots.has('aside') && (
+      <div class="pb-1">
+        <slot name="aside" />
+      </div>
+    )
+  }
 </div>

@@ -1,12 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '@/layouts/Base.astro';
 import SectionHeading from '@/components/SectionHeading.astro';
 import BlogCard from '@/components/BlogCard.astro';
+import { getPublishedPosts } from '@/lib/blog';
 
-const posts = (await getCollection('blog'))
-  .filter((p) => !p.data.draft)
-  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+const posts = await getPublishedPosts();
 ---
 
 <Base

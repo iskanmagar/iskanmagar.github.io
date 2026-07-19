@@ -1,18 +1,21 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '@/layouts/Base.astro';
 import Hero from '@/components/Hero.astro';
 import SectionHeading from '@/components/SectionHeading.astro';
 import EpisodeCard from '@/components/EpisodeCard.astro';
 import GuestCard from '@/components/GuestCard.astro';
 import BlogCard from '@/components/BlogCard.astro';
+import UpNextCard from '@/components/UpNextCard.astro';
+import { getCollection } from 'astro:content';
+import { getEpisodesLatestFirst } from '@/lib/episodes';
+import { getPublishedPosts } from '@/lib/blog';
 import { SITE, SOCIAL } from '@/site.config';
 
-const episodes = (await getCollection('episodes')).sort((a, b) => b.data.order - a.data.order);
+const episodes = await getEpisodesLatestFirst();
 const guests = await getCollection('guests');
-const posts = (await getCollection('blog'))
-  .filter((p) => !p.data.draft)
-  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+const posts = await getPublishedPosts();
+
+const nextEpisodeNumber = String(episodes.length + 1).padStart(2, '0');
 
 const jsonLd = [
   {
@@ -46,43 +49,77 @@ const jsonLd = [
     },
   },
 ];
+
+const sectionLink = 'link-underline font-mono text-xs uppercase tracking-widest';
 ---
 
 <Base jsonLd={jsonLd}>
   <Hero />
 
   <!-- Episodes -->
-  <section id="episodes" class="border-t border-signal/20 px-4 py-20">
-    <div class="mx-auto max-w-7xl">
-      <SectionHeading title="Archived Episodes" eyebrow="Recorded Transmissions" />
+  <section id="episodes" class="scroll-mt-24 border-t border-signal/20 px-4 py-20">
+    <div class="reveal mx-auto max-w-7xl">
+      <SectionHeading title="Archived Episodes" eyebrow="Recorded Transmissions">
+        <a slot="aside" href="/episodes" class={sectionLink}>All episodes →</a>
+      </SectionHeading>
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {episodes.map((e) => <EpisodeCard episode={e.data} />)}
-      </div>
-      <div class="mt-10">
-        <a href="/episodes" class="btn-ghost"> All episodes → </a>
+        {
+          episodes.length < 3 && (
+            <UpNextCard
+              media
+              label="Next transmission"
+              title={`EP ${nextEpisodeNumber} · In production`}
+              note="New conversations with builders from the edge are being recorded."
+              href={SOCIAL.youtube}
+              linkText="Subscribe for the drop ↗"
+            />
+          )
+        }
       </div>
     </div>
   </section>
 
   <!-- Blog -->
-  <section id="blog" class="border-t border-magenta/20 px-4 py-20">
-    <div class="mx-auto max-w-7xl">
-      <SectionHeading title="Transmission Log" eyebrow="Written Broadcasts" marker="■" accent="magenta" />
-      <div class="space-y-6">
+  <section id="blog" class="scroll-mt-24 border-t border-magenta/20 bg-ink-soft/40 px-4 py-20">
+    <div class="reveal mx-auto max-w-7xl">
+      <SectionHeading title="Transmission Log" eyebrow="Written Broadcasts" marker="■" accent="magenta">
+        <a slot="aside" href="/blog" class={sectionLink}>All posts →</a>
+      </SectionHeading>
+      <div class="max-w-3xl space-y-6">
         {posts.slice(0, 4).map((post) => <BlogCard post={post} />)}
-      </div>
-      <div class="mt-10">
-        <a href="/blog" class="btn-ghost"> All posts → </a>
       </div>
     </div>
   </section>
 
+  <!-- Manifesto band -->
+  <section class="border-t border-ink-line bg-ink-soft/60 px-4 py-16 sm:py-20">
+    <div class="reveal mx-auto max-w-3xl text-center">
+      <p class="eyebrow mb-6 justify-center">From the manifesto</p>
+      <blockquote class="text-balance font-heading text-2xl font-bold leading-snug text-white sm:text-3xl">
+        “A weak signal can still reach <span class="text-signal">new skies</span>.”
+      </blockquote>
+      <a href="/about" class="btn-ghost mt-9">Read the manifesto</a>
+    </div>
+  </section>
+
   <!-- Guests -->
-  <section id="guests" class="border-t border-signal/20 px-4 py-20">
-    <div class="mx-auto max-w-7xl">
+  <section id="guests" class="scroll-mt-24 border-t border-signal/20 px-4 py-20">
+    <div class="reveal mx-auto max-w-7xl">
       <SectionHeading title="Featured Guests" eyebrow="Featured Signals" marker="◎" />
       <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {guests.map((g) => <GuestCard guest={g.data} />)}
+        {
+          guests.length < 3 && (
+            <UpNextCard
+              label="Future signal"
+              title="Your story could be next"
+              note="Know a builder from an underrepresented community with a story worth broadcasting? Send us a signal."
+              href={SOCIAL.twitter}
+              linkText="Suggest a guest ↗"
+            />
+          )
+        }
       </div>
     </div>
   </section>
