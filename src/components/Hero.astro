@@ -1,10 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
 import { SOCIAL } from '@/site.config';
 import RetroTV from '@/components/RetroTV.astro';
+import BroadcastTicker from '@/components/BroadcastTicker.astro';
+import { getLatestEpisode } from '@/lib/episodes';
 
-const episodes = (await getCollection('episodes')).sort((a, b) => b.data.order - a.data.order);
-const latest = episodes[0];
+const latest = await getLatestEpisode();
 
 const tickerItems = [
   'ⵉⵙⴽⴰⵏⵎⴰⴳⴰⵔ',
@@ -15,7 +15,7 @@ const tickerItems = [
 ];
 ---
 
-<section class="relative">
+<section class="relative" aria-label="Now broadcasting">
   <!-- Master control: the station's monitor wall -->
   <div
     class="mx-auto grid max-w-7xl grid-cols-1 gap-5 px-4 pb-16 pt-10 lg:grid-cols-[minmax(0,1.62fr)_minmax(0,1fr)] lg:pt-14"
@@ -92,21 +92,5 @@ const tickerItems = [
     </div>
   </div>
 
-  <!-- Broadcast ticker -->
-  <div class="overflow-hidden border-y border-ink-line bg-ink-soft/70" aria-hidden="true">
-    <div class="flex w-max animate-ticker py-3 font-mono text-[11px] tracking-[0.3em] text-gray-500">
-      {
-        [0, 1].map(() => (
-          <div class="flex shrink-0 items-center">
-            {tickerItems.map((item) => (
-              <>
-                <span class="whitespace-nowrap px-7">{item}</span>
-                <span class="h-1.5 w-1.5 shrink-0 bg-signal/60" />
-              </>
-            ))}
-          </div>
-        ))
-      }
-    </div>
-  </div>
+  <BroadcastTicker items={tickerItems} />
 </section>

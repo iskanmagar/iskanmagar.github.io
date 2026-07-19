@@ -34,6 +34,9 @@ const props = Astro.props;
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content={SITE.shortName} />
     <meta name="generator" content={Astro.generator} />
+    <!-- Hero episode thumbnail is above the fold; player loads on demand -->
+    <link rel="preconnect" href="https://i.ytimg.com" />
+    <link rel="dns-prefetch" href="https://www.youtube-nocookie.com" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link
       rel="alternate"

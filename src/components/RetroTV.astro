@@ -1,8 +1,8 @@
 ---
-import { getCollection } from 'astro:content';
+import { getEpisodes } from '@/lib/episodes';
 import { youtubeId, youtubeThumb } from '@/lib/youtube';
 
-const episodes = (await getCollection('episodes')).sort((a, b) => a.data.order - b.data.order);
+const episodes = await getEpisodes();
 const channels = episodes.map((e) => ({
   ep: e.data.ep,
   title: e.data.title,
@@ -11,7 +11,12 @@ const channels = episodes.map((e) => ({
 }));
 ---
 
-<div class="tv-stage boot boot-3" data-retro-tv>
+<div
+  class="tv-stage boot boot-3"
+  data-retro-tv
+  role="group"
+  aria-label="Vintage TV — browse and play episodes. Arrow keys switch channels."
+>
   <div class="tv-rig">
     <div class="tv-sway">
       <div class="tv-box">
@@ -28,66 +33,76 @@ const channels = episodes.map((e) => ({
 
         <!-- Walnut cabinet (front face) -->
         <div class="cabinet">
-      <div class="face">
-        <!-- CRT -->
-        <div class="screen-frame">
-          <div class="screen" data-screen>
-            <!-- CH 00 · station ident -->
-            <div class="channel" data-kind="ident">
-              <div class="ident-bars" aria-hidden="true">
-                <i class="bg-gray-200"></i><i class="bg-amber"></i><i class="bg-signal"></i><i
-                  class="bg-phosphor"></i><i class="bg-magenta"></i><i class="bg-red-500"></i><i
-                  class="bg-blue-600"></i>
+          <div class="face">
+            <!-- CRT -->
+            <div class="screen-frame">
+              <div class="screen" data-screen>
+                <!-- CH 00 · station ident -->
+                <div class="channel" data-kind="ident">
+                  <div class="ident-bars" aria-hidden="true">
+                    <i class="bg-gray-200"></i><i class="bg-amber"></i><i class="bg-signal"></i><i
+                      class="bg-phosphor"></i><i class="bg-magenta"></i><i class="bg-red-500"></i><i
+                      class="bg-blue-600"></i>
+                  </div>
+                  <img src="/logo.svg" alt="" width="44" height="44" class="ident-logo" aria-hidden="true" />
+                  <p class="ident-tifinagh">ⵉⵙⴽⴰⵏⵎⴰⴳⴰⵔ</p>
+                  <p class="ident-name">ISKANMAGAR</p>
+                </div>
+
+                <!-- Episode channels -->
+                {
+                  channels.map((c) => (
+                    <div class="channel" data-kind="ep" data-ytid={c.ytid} data-ep={c.ep} data-title={c.title}>
+                      {c.thumb && (
+                        <img
+                          src={c.thumb}
+                          alt={`Episode ${c.ep}: ${c.title}`}
+                          width="480"
+                          height="360"
+                          loading="eager"
+                          fetchpriority="high"
+                          decoding="async"
+                        />
+                      )}
+                      <button type="button" class="play" data-play aria-label={`Play episode ${c.ep}: ${c.title}`}>
+                        <span aria-hidden="true">▶</span>
+                      </button>
+                    </div>
+                  ))
+                }
+
+                <div class="static-burst" data-static aria-hidden="true"></div>
+                <div class="screen-scanlines" aria-hidden="true"></div>
+                <div class="glass" aria-hidden="true"></div>
+                <p class="osd font-display" data-osd aria-hidden="true">CH 01</p>
               </div>
-              <img src="/logo.svg" alt="" width="44" height="44" class="ident-logo" aria-hidden="true" />
-              <p class="ident-tifinagh">ⵉⵙⴽⴰⵏⵎⴰⴳⴰⵔ</p>
-              <p class="ident-name">ISKANMAGAR</p>
             </div>
 
-            <!-- Episode channels -->
-            {
-              channels.map((c) => (
-                <div class="channel" data-kind="ep" data-ytid={c.ytid} data-ep={c.ep} data-title={c.title}>
-                  {c.thumb && <img src={c.thumb} alt={`Episode ${c.ep}: ${c.title}`} width="480" height="360" loading="eager" decoding="async" />}
-                  <button class="play" data-play aria-label={`Play episode ${c.ep}: ${c.title}`}>
-                    <span aria-hidden="true">▶</span>
-                  </button>
-                </div>
-              ))
-            }
+            <!-- Control panel -->
+            <div class="controls">
+              <p class="brand">ISKANMAGAR</p>
+              <p class="readout font-display" data-readout aria-live="polite">01</p>
 
-            <div class="static-burst" data-static aria-hidden="true"></div>
-            <div class="screen-scanlines" aria-hidden="true"></div>
-            <div class="glass" aria-hidden="true"></div>
-            <p class="osd font-display" data-osd aria-hidden="true">CH 01</p>
+              <button type="button" class="knob" data-next aria-label="Next channel">
+                <span class="knob-marker" data-knob-marker></span>
+              </button>
+              <p class="ctl-label">Channel</p>
+
+              <div class="chbtns">
+                <button type="button" data-prev aria-label="Previous channel">▼</button>
+                <button type="button" data-next aria-label="Next channel">▲</button>
+              </div>
+
+              <div class="grille" aria-hidden="true">
+                <i></i><i></i><i></i><i></i><i></i><i></i>
+              </div>
+
+              <button type="button" class="power" data-power aria-pressed="true" aria-label="Power">
+                <span class="led" data-led></span>
+              </button>
+            </div>
           </div>
         </div>
-
-        <!-- Control panel -->
-        <div class="controls">
-          <p class="brand">ISKANMAGAR</p>
-          <p class="readout font-display" data-readout aria-live="polite">01</p>
-
-          <button class="knob" data-next aria-label="Next channel">
-            <span class="knob-marker" data-knob-marker></span>
-          </button>
-          <p class="ctl-label">Channel</p>
-
-          <div class="chbtns">
-            <button data-prev aria-label="Previous channel">▼</button>
-            <button data-next aria-label="Next channel">▲</button>
-          </div>
-
-          <div class="grille" aria-hidden="true">
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-          </div>
-
-          <button class="power" data-power aria-pressed="true" aria-label="Power">
-            <span class="led" data-led></span>
-          </button>
-        </div>
-      </div>
-    </div>
 
         <!-- Feet -->
         <div class="feet" aria-hidden="true"><span></span><span></span></div>
@@ -101,91 +116,135 @@ const channels = episodes.map((e) => ({
 </div>
 
 <script>
-  const tv = document.querySelector('[data-retro-tv]');
-  if (tv) {
-    const screen = tv.querySelector('[data-screen]') as HTMLElement;
-    const channels = Array.from(tv.querySelectorAll('.channel')) as HTMLElement[];
-    const burst = tv.querySelector('[data-static]') as HTMLElement;
-    const osd = tv.querySelector('[data-osd]') as HTMLElement;
-    const readout = tv.querySelector('[data-readout]') as HTMLElement;
-    const caption = tv.querySelector('[data-caption]') as HTMLElement;
-    const marker = tv.querySelector('[data-knob-marker]') as HTMLElement;
-    const led = tv.querySelector('[data-led]') as HTMLElement;
-    const powerBtn = tv.querySelector('[data-power]') as HTMLButtonElement;
+  const STATIC_BURST_MS = 300;
+  const OSD_VISIBLE_MS = 1800;
+  const KNOB_STEP_DEG = 45;
+  const PLAYER_LOAD_TIMEOUT_MS = 4000;
 
-    let cur = channels.length > 1 ? 1 : 0; // start on the first episode
+  function initRetroTV(tv: HTMLElement): void {
+    const screen = tv.querySelector<HTMLElement>('[data-screen]');
+    const burst = tv.querySelector<HTMLElement>('[data-static]');
+    const osd = tv.querySelector<HTMLElement>('[data-osd]');
+    const readout = tv.querySelector<HTMLElement>('[data-readout]');
+    const caption = tv.querySelector<HTMLElement>('[data-caption]');
+    const marker = tv.querySelector<HTMLElement>('[data-knob-marker]');
+    const led = tv.querySelector<HTMLElement>('[data-led]');
+    const powerBtn = tv.querySelector<HTMLButtonElement>('[data-power]');
+    const channels = [...tv.querySelectorAll<HTMLElement>('.channel')];
+    if (!screen || !burst || !osd || !readout || !caption || !marker || !led || !powerBtn) return;
+    if (channels.length === 0) return;
+
+    let cur = channels.length - 1; // tune to the latest episode by default
     let on = true;
-    let rot = 0;
-    let osdTimer: ReturnType<typeof setTimeout>;
+    let knobAngle = 0;
+    let osdTimer: ReturnType<typeof setTimeout> | undefined;
+    let burstTimer: ReturnType<typeof setTimeout> | undefined;
 
-    const chanNumber = (el: HTMLElement) =>
+    const channelNumber = (el: HTMLElement): string =>
       el.dataset.kind === 'ident' ? '00' : (el.dataset.ep ?? '01').padStart(2, '0');
 
-    function killIframe() {
-      screen.querySelectorAll('iframe').forEach((f) => f.remove());
+    function showStatic(ms: number): void {
+      burst!.classList.add('show');
+      clearTimeout(burstTimer);
+      burstTimer = setTimeout(() => burst!.classList.remove('show'), ms);
+    }
+
+    function stopPlayback(): void {
+      screen!.querySelectorAll('iframe').forEach((f) => f.remove());
       channels.forEach((c) => c.classList.remove('playing'));
     }
 
-    function show(idx: number, withBurst = true) {
+    function tune(idx: number, withBurst = true): void {
       cur = (idx + channels.length) % channels.length;
-      killIframe();
+      stopPlayback();
       channels.forEach((c, i) => c.classList.toggle('active', i === cur));
+
       const el = channels[cur];
-      const num = chanNumber(el);
-      readout.textContent = num;
-      osd.textContent = `CH ${num}`;
-      osd.classList.add('show');
+      const num = channelNumber(el);
+      readout!.textContent = num;
+      osd!.textContent = `CH ${num}`;
+      osd!.classList.add('show');
       clearTimeout(osdTimer);
-      osdTimer = setTimeout(() => osd.classList.remove('show'), 1800);
-      caption.textContent =
+      osdTimer = setTimeout(() => osd!.classList.remove('show'), OSD_VISIBLE_MS);
+      caption!.textContent =
         el.dataset.kind === 'ident'
           ? 'STATION IDENT · ⵉⵙⴽⴰⵏⵎⴰⴳⴰⵔ'
           : `NOW PLAYING · EP ${el.dataset.ep} — ${el.dataset.title}`;
-      if (withBurst) {
-        burst.classList.add('show');
-        setTimeout(() => burst.classList.remove('show'), 300);
-      }
+      if (withBurst) showStatic(STATIC_BURST_MS);
     }
 
-    function turnKnob(dir: number) {
+    function turnKnob(direction: 1 | -1): void {
       if (!on) return;
-      rot += dir * 45;
-      marker.style.transform = `rotate(${rot}deg)`;
-      show(cur + dir);
+      knobAngle += direction * KNOB_STEP_DEG;
+      marker!.style.transform = `rotate(${knobAngle}deg)`;
+      tune(cur + direction);
+    }
+
+    function play(channel: HTMLElement): void {
+      if (!on || !channel.classList.contains('active') || !channel.dataset.ytid) return;
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube-nocookie.com/embed/${channel.dataset.ytid}?autoplay=1&rel=0`;
+      iframe.title = `Episode ${channel.dataset.ep}: ${channel.dataset.title}`;
+      iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+      iframe.allowFullscreen = true;
+      // Static plays while the player warms up, like a set searching for signal.
+      showStatic(PLAYER_LOAD_TIMEOUT_MS);
+      iframe.addEventListener('load', () => burst!.classList.remove('show'), { once: true });
+      channel.appendChild(iframe);
+      channel.classList.add('playing');
+    }
+
+    function togglePower(): void {
+      on = !on;
+      powerBtn!.setAttribute('aria-pressed', String(on));
+      tv.classList.toggle('tv-off', !on);
+      led!.classList.toggle('off', !on);
+      if (on) {
+        tune(cur, false);
+      } else {
+        stopPlayback();
+        caption!.textContent = 'STANDBY';
+      }
     }
 
     tv.querySelectorAll('[data-next]').forEach((b) => b.addEventListener('click', () => turnKnob(1)));
     tv.querySelectorAll('[data-prev]').forEach((b) => b.addEventListener('click', () => turnKnob(-1)));
-
-    powerBtn.addEventListener('click', () => {
-      on = !on;
-      powerBtn.setAttribute('aria-pressed', String(on));
-      tv.classList.toggle('tv-off', !on);
-      led.classList.toggle('off', !on);
-      if (!on) killIframe();
-    });
-
-    tv.querySelectorAll('[data-play]').forEach((btn) =>
-      btn.addEventListener('click', (ev) => {
-        if (!on) return;
-        const ch = (ev.currentTarget as HTMLElement).closest('.channel') as HTMLElement;
-        if (!ch.classList.contains('active') || !ch.dataset.ytid) return;
-        const iframe = document.createElement('iframe');
-        iframe.src = `https://www.youtube-nocookie.com/embed/${ch.dataset.ytid}?autoplay=1&rel=0`;
-        iframe.title = `Episode ${ch.dataset.ep}: ${ch.dataset.title}`;
-        iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
-        iframe.allowFullscreen = true;
-        ch.appendChild(iframe);
-        ch.classList.add('playing');
+    powerBtn.addEventListener('click', togglePower);
+    tv.querySelectorAll<HTMLElement>('[data-play]').forEach((btn) =>
+      btn.addEventListener('click', () => {
+        const channel = btn.closest<HTMLElement>('.channel');
+        if (channel) play(channel);
       })
     );
 
-    show(cur, false);
+    // Channel-surf with the keyboard while focus is anywhere on the set
+    tv.addEventListener('keydown', (ev) => {
+      if (ev.key === 'ArrowUp' || ev.key === 'ArrowRight') {
+        ev.preventDefault();
+        turnKnob(1);
+      } else if (ev.key === 'ArrowDown' || ev.key === 'ArrowLeft') {
+        ev.preventDefault();
+        turnKnob(-1);
+      }
+    });
+
+    tune(cur, false);
   }
+
+  const tvRoot = document.querySelector<HTMLElement>('[data-retro-tv]');
+  if (tvRoot) initRetroTV(tvRoot);
 </script>
 
 <style>
   .tv-stage {
+    /* Cabinet geometry — every folded panel derives from these */
+    --depth: 110px; /* how far the box extends into Z */
+    --antenna-h: 74px; /* clearance row above the cabinet */
+    --corner: 14px; /* panel corner radius, matches cabinet */
+    /* Shared accents */
+    --phosphor: #48e06a;
+    --signal: #2ee6d6;
+
     position: relative;
     width: 100%;
     max-width: 430px;
@@ -207,6 +266,7 @@ const channels = episodes.map((e) => ({
   .tv-sway {
     transform-style: preserve-3d;
     animation: tv-sway 9s ease-in-out infinite alternate;
+    will-change: transform;
   }
   .tv-stage:hover .tv-sway {
     animation-play-state: paused;
@@ -227,13 +287,13 @@ const channels = episodes.map((e) => ({
   /* Folded wood panels give the cabinet real depth */
   .panel-right {
     position: absolute;
-    top: 76px; /* below antenna row */
+    top: calc(var(--antenna-h) + 2px); /* just below the cabinet's top edge */
     bottom: 22px; /* above feet */
     left: 100%;
-    width: 110px;
+    width: var(--depth);
     transform-origin: left center;
     transform: rotateY(90deg);
-    border-radius: 0 14px 14px 0;
+    border-radius: 0 var(--corner) var(--corner) 0;
     background:
       repeating-linear-gradient(
         178deg,
@@ -246,14 +306,14 @@ const channels = episodes.map((e) => ({
   }
   .panel-top {
     position: absolute;
-    top: 74px; /* cabinet's top edge (antenna row above) */
+    top: var(--antenna-h); /* cabinet's top edge (antenna row above) */
     left: 0;
     right: 0;
-    height: 110px;
-    margin-top: -110px;
+    height: var(--depth);
+    margin-top: calc(-1 * var(--depth));
     transform-origin: center bottom;
     transform: rotateX(90deg);
-    border-radius: 14px 14px 0 0;
+    border-radius: var(--corner) var(--corner) 0 0;
     background:
       repeating-linear-gradient(
         88deg,
@@ -268,8 +328,8 @@ const channels = episodes.map((e) => ({
   /* ── Antenna ─────────────────────────────────────────── */
   .antenna {
     position: relative;
-    height: 74px;
-    transform: translateZ(-55px); /* planted mid-way along the top face */
+    height: var(--antenna-h);
+    transform: translateZ(calc(var(--depth) / -2)); /* planted mid-way along the top face */
   }
   .ear {
     position: absolute;
@@ -321,7 +381,7 @@ const channels = episodes.map((e) => ({
         rgba(0, 0, 0, 0.14) 7px 9px,
         rgba(255, 255, 255, 0.025) 9px 11px
       ),
-      linear-gradient(160deg, #5b3f27 0%, #46301d 38%, #33231414 60%, #33200f 100%),
+      linear-gradient(160deg, #5b3f27 0%, #46301d 38%, #332314 60%, #33200f 100%),
       #3c2917;
     box-shadow:
       0 1px 0 rgba(255, 255, 255, 0.14) inset,
@@ -361,9 +421,10 @@ const channels = episodes.map((e) => ({
   .tv-off .screen {
     box-shadow: none;
   }
+  /* visibility (not opacity) so the invisible play button can't catch clicks */
   .tv-off .channel,
   .tv-off .osd {
-    opacity: 0 !important;
+    visibility: hidden;
   }
 
   .channel {
@@ -422,8 +483,8 @@ const channels = episodes.map((e) => ({
   }
   .play:hover span {
     transform: scale(1.08);
-    border-color: #2ee6d6;
-    color: #2ee6d6;
+    border-color: var(--signal);
+    color: var(--signal);
   }
 
   /* Station ident channel */
@@ -521,7 +582,7 @@ const channels = episodes.map((e) => ({
     right: 12px;
     z-index: 7;
     font-size: 11px;
-    color: #48e06a;
+    color: var(--phosphor);
     text-shadow: 0 0 6px rgba(72, 224, 106, 0.7);
     opacity: 0;
     transition: opacity 0.25s;
@@ -557,7 +618,7 @@ const channels = episodes.map((e) => ({
     border-radius: 4px;
     text-align: center;
     font-size: 13px;
-    color: #48e06a;
+    color: var(--phosphor);
     background: #0a0c08;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) inset;
     text-shadow: 0 0 7px rgba(72, 224, 106, 0.8);
@@ -596,7 +657,7 @@ const channels = episodes.map((e) => ({
     height: 14px;
     margin-left: -2px;
     border-radius: 2px;
-    background: #2ee6d6;
+    background: var(--signal);
     box-shadow: 0 0 6px rgba(46, 230, 214, 0.8);
   }
   .ctl-label {
@@ -621,7 +682,7 @@ const channels = episodes.map((e) => ({
     transition: transform 0.12s;
   }
   .chbtns button:hover {
-    color: #2ee6d6;
+    color: var(--signal);
   }
   .chbtns button:active {
     transform: translateY(1px);
@@ -654,7 +715,7 @@ const channels = episodes.map((e) => ({
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #48e06a;
+    background: var(--phosphor);
     box-shadow: 0 0 8px rgba(72, 224, 106, 0.9);
     transition:
       background 0.2s,

@@ -156,19 +156,10 @@
       1.5px 0 rgba(46, 230, 214, 0.45);
   }
 
-  /* CRT power-on: the screen snaps open from a bright horizontal line.
-     Numbered variants stagger the monitor wall booting one screen at a time. */
+  /* CRT power-on: the screen snaps open from a bright horizontal line */
   .crt-on {
     transform-origin: center;
     animation: crt-on 0.7s cubic-bezier(0.23, 1, 0.32, 1) 0.15s both;
-  }
-  .crt-on-2 {
-    transform-origin: center;
-    animation: crt-on 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0.65s both;
-  }
-  .crt-on-3 {
-    transform-origin: center;
-    animation: crt-on 0.6s cubic-bezier(0.23, 1, 0.32, 1) 1.05s both;
   }
 
   /* Monitor housing for the control-room wall */
@@ -206,7 +197,6 @@
   .boot-3 { animation-delay: 0.7s; }
   .boot-4 { animation-delay: 0.85s; }
   .boot-5 { animation-delay: 1s; }
-  .boot-6 { animation-delay: 1.15s; }
   .bg-grid {
     background-image: theme('backgroundImage.grid-faint');
     background-size: 46px 46px;
