@@ -197,6 +197,7 @@
   .boot-3 { animation-delay: 0.7s; }
   .boot-4 { animation-delay: 0.85s; }
   .boot-5 { animation-delay: 1s; }
+  .boot-6 { animation-delay: 1.15s; }
   .bg-grid {
     background-image: theme('backgroundImage.grid-faint');
     background-size: 46px 46px;

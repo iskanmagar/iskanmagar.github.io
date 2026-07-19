@@ -37,46 +37,83 @@ const tickerItems = [
         >
         </div>
 
+        <!-- Test-card frame (PM5544-style): fat SMPTE bars + castellation top, stepped grayscale ramp bottom -->
+        <div class="bars absolute inset-x-0 top-0 z-10 h-8 sm:h-10" aria-hidden="true"></div>
+        <div
+          class="absolute inset-x-0 top-8 z-10 h-2 bg-[repeating-linear-gradient(90deg,#000_0_22px,#e5e7eb_22px_44px)] opacity-80 sm:top-10"
+          aria-hidden="true"
+        >
+        </div>
+        <div
+          class="absolute inset-x-0 bottom-0 z-10 h-2.5 bg-[linear-gradient(90deg,#000_0_12.5%,#2a2a2a_12.5%_25%,#555_25%_37.5%,#808080_37.5%_50%,#a8a8a8_50%_62.5%,#cfcfcf_62.5%_75%,#ececec_75%_87.5%,#fff_87.5%)] opacity-50"
+          aria-hidden="true"
+        >
+        </div>
+
         <!-- OSD chrome -->
-        <div class="absolute left-4 top-4 z-30 flex items-center gap-1 border border-amber/60 bg-amber/10 px-2 py-1 font-mono text-[10px] text-amber">
+        <div class="absolute left-4 top-14 z-30 flex items-center gap-1 border border-amber/60 bg-amber/10 px-2 py-1 font-mono text-[10px] text-amber sm:top-16">
           <span class="h-1.5 w-1.5 animate-blink rounded-full bg-amber"></span> REC
         </div>
-        <div class="absolute right-4 top-4 z-30 border border-phosphor/40 bg-phosphor/10 px-2 py-1 font-mono text-[10px] text-phosphor">
+        <div class="absolute right-4 top-14 z-30 border border-phosphor/40 bg-phosphor/10 px-2 py-1 font-mono text-[10px] text-phosphor sm:top-16">
           ON AIR
         </div>
-        <div class="absolute bottom-4 left-4 z-30 hidden font-mono text-[10px] tracking-[0.25em] text-gray-500 sm:block">
+        <div class="absolute bottom-5 left-4 z-30 hidden font-mono text-[10px] tracking-[0.25em] text-gray-500 sm:block">
           ⵉⵙⴽⴰⵏⵎⴰⴳⴰⵔ · CH 01
         </div>
-        <div class="absolute bottom-4 right-4 z-30 hidden items-end gap-2 sm:flex">
+        <div class="absolute bottom-5 right-4 z-30 hidden items-end gap-2 sm:flex">
           <span class="font-mono text-[9px] tracking-widest text-gray-600">SIGNAL</span>
           <div class="meter" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
         </div>
 
-        <!-- The story -->
-        <div class="relative z-10 flex flex-col items-center px-6 py-16 text-center sm:px-12 lg:min-h-[560px] lg:justify-center lg:py-20">
-          <h1 class="boot boot-1 text-crt font-display text-2xl leading-relaxed text-white sm:text-4xl lg:text-5xl">
+        <!-- The story, composed as the station's test card -->
+        <div class="relative z-10 flex flex-col items-center px-6 pb-16 pt-24 text-center sm:px-12 sm:pt-28 lg:min-h-[560px] lg:justify-center lg:py-24">
+          <!-- Test-card center: logo in a calibration ring, color band running through -->
+          <div class="boot boot-1 relative mb-9 flex h-28 w-28 items-center justify-center sm:h-32 sm:w-32" aria-hidden="true">
+            <span class="absolute inset-0 rounded-full border border-gray-500/80"></span>
+            <span class="absolute inset-2 rounded-full border border-gray-600/60"></span>
+            <!-- color band clipped inside the circle, like the PM5544 -->
+            <span class="absolute inset-1 overflow-hidden rounded-full">
+              <span class="bars absolute inset-x-0 top-1/2 h-5 -translate-y-1/2 opacity-90"></span>
+            </span>
+            <!-- crosshair ticks -->
+            <span class="absolute -top-1.5 left-1/2 h-3 w-px -translate-x-1/2 bg-gray-500"></span>
+            <span class="absolute -bottom-1.5 left-1/2 h-3 w-px -translate-x-1/2 bg-gray-500"></span>
+            <span class="absolute -left-1.5 top-1/2 h-px w-3 -translate-y-1/2 bg-gray-500"></span>
+            <span class="absolute -right-1.5 top-1/2 h-px w-3 -translate-y-1/2 bg-gray-500"></span>
+            <span class="relative flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full bg-ink-soft/90 sm:h-20 sm:w-20">
+              <img
+                src="/logo.svg"
+                alt=""
+                width="64"
+                height="64"
+                class="h-12 w-12 brightness-0 invert sm:h-14 sm:w-14"
+              />
+            </span>
+          </div>
+
+          <h1 class="boot boot-2 text-crt font-display text-2xl leading-relaxed text-white sm:text-4xl lg:text-5xl">
             SIGNAL LOST<span class="sr-only">
               — Iskanmagar Broadcast Network: transmissions from underrepresented, multilingual
               builders at the edge of technology, creativity, and community</span
             >
           </h1>
-          <p class="boot boot-2 mt-5 font-mono text-xs tracking-signal text-gray-500 sm:text-sm">
+          <p class="boot boot-3 mt-5 font-mono text-xs tracking-signal text-gray-500 sm:text-sm">
             PLEASE STAND BY
           </p>
 
           <p
-            class="boot boot-3 mt-9 inline-flex items-center gap-1 border border-signal/40 bg-ink/80 px-5 py-3 font-mono text-sm text-signal sm:px-6 sm:py-3.5 sm:text-lg"
+            class="boot boot-4 mt-9 inline-flex items-center gap-1 border border-signal/40 bg-ink/80 px-5 py-3 font-mono text-sm text-signal sm:px-6 sm:py-3.5 sm:text-lg"
           >
             <span class="text-gray-600" aria-hidden="true">&gt;&nbsp;</span>iskanmagar init .<span
               class="ml-1 inline-block h-[1.1em] w-[0.55em] animate-blink bg-signal align-text-bottom"
               aria-hidden="true"></span>
           </p>
 
-          <p class="boot boot-4 mt-7 max-w-md text-balance text-base leading-relaxed text-gray-300 sm:text-lg">
+          <p class="boot boot-5 mt-7 max-w-md text-balance text-base leading-relaxed text-gray-300 sm:text-lg">
             Where we start is not where we are meant to stop.
           </p>
 
-          <div class="boot boot-5 mt-9 flex w-full flex-col items-center justify-center gap-3.5 sm:w-auto sm:flex-row">
+          <div class="boot boot-6 mt-9 flex w-full flex-col items-center justify-center gap-3.5 sm:w-auto sm:flex-row">
             <a href={SOCIAL.youtube} target="_blank" rel="noreferrer" class="btn-signal w-full sm:w-auto">
               ▶ Watch on YouTube
             </a>
