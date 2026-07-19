@@ -1,92 +1,70 @@
-# iskanmagar.github.io
+# iskanmagar.com
 
-A retro-futuristic portfolio website with a nostalgic TV broadcast theme. Built with React, Vite, Tailwind CSS, and Framer Motion.
+**Iskanmagar Broadcast Network** — a retro-broadcast site for stories, podcasts, and transmissions from underrepresented, multilingual builders creating at the edge of technology, creativity, and community.
 
-## 🚀 Features
+Statically rendered with **Astro** + **Tailwind CSS**. Ships **zero framework JavaScript** — every page is full HTML for fast loads and complete SEO/crawlability.
 
-- **Retro TV Design**: Nostalgic color bar display with animated effects
-- **Smooth Animations**: Powered by Framer Motion for elegant transitions
-- **Responsive Design**: Works seamlessly on all device sizes
-- **Modern Stack**: Built with React 18 and Vite for fast development
-- **Tailwind CSS**: Utility-first styling for rapid UI development
-- **GitHub Pages Deployment**: Automated deployment with GitHub Actions
+## 🚀 Stack
 
-## 📦 Installation
+- **Astro 5** — static output, per-page `<head>`/SEO, content collections
+- **Tailwind CSS 3** — brand token design system (see `tailwind.config.mjs`)
+- **Self-hosted fonts** via `@fontsource` (Space Grotesk, JetBrains Mono, Press Start 2P) — no render-blocking Google Fonts
+- **`astro:assets`** — responsive WebP image optimization
+- **`@astrojs/sitemap`** + **`@astrojs/rss`** — auto sitemap & podcast/blog feed
+- Deployed to **GitHub Pages** via GitHub Actions, served at `https://iskanmagar.com`
+
+## 📦 Install & Develop
 
 ```bash
-# Install dependencies
 npm install
-```
-
-## 🛠️ Development
-
-```bash
-# Start development server
-npm run dev
-
-# The site will be available at http://localhost:5173
+npm run dev        # http://localhost:4321
 ```
 
 ## 🏗️ Build
 
 ```bash
-# Build for production
-npm run build
-
-# Preview production build locally
+npm run build      # → ./dist  (sitemap, rss, optimized images, robots.txt, CNAME)
 npm run preview
 ```
-
-## 🚢 Deployment
-
-The site is automatically deployed to GitHub Pages when you push to the `main` branch.
-
-### Manual Setup (First Time)
-
-1. Go to your repository settings
-2. Navigate to **Pages** section
-3. Under **Source**, select **GitHub Actions**
-4. Push to the `main` branch to trigger the deployment
-
-The site will be available at: `https://iskanmagar.github.io`
 
 ## 📁 Project Structure
 
 ```
-iskanmagar.github.io/
-├── .github/
-│   └── workflows/
-│       └── deploy.yml          # GitHub Actions deployment workflow
-├── src/
-│   ├── components/
-│   │   └── LandingPage.jsx     # Main landing page component
-│   ├── App.jsx                 # Root App component
-│   ├── main.jsx                # Application entry point
-│   └── index.css               # Global styles with Tailwind
-├── index.html                  # HTML entry point
-├── package.json                # Dependencies and scripts
-├── vite.config.js              # Vite configuration
-├── tailwind.config.js          # Tailwind CSS configuration
-└── postcss.config.js           # PostCSS configuration
+├─ astro.config.mjs          # site: https://iskanmagar.com, integrations
+├─ tailwind.config.mjs       # brand color/type tokens
+├─ public/                   # CNAME, robots.txt, favicon.svg, logo.svg, og/
+├─ scripts/og-source.svg     # source for the generated OG image
+└─ src/
+   ├─ site.config.ts         # SITE constants, SOCIAL links, NAV (single source of truth)
+   ├─ content/               # episodes / guests / hosts / blog collections (+ config.ts)
+   ├─ assets/                # images optimized at build (taha-host.jpg)
+   ├─ components/            # Navbar, Footer, Hero, *Card, SectionHeading, seo/Seo.astro
+   ├─ layouts/Base.astro     # html shell + SEO + nav/footer
+   ├─ styles/global.css      # Tailwind + brand primitives (.panel, .btn-*, etc.)
+   └─ pages/                 # index, about, guests, episodes, blog/[slug], 404, rss.xml
 ```
 
-## 🛡️ Technologies
+## ✏️ Editing content
 
-- **React 18**: UI library
-- **Vite**: Build tool and dev server
-- **Tailwind CSS**: Utility-first CSS framework
-- **Framer Motion**: Animation library
-- **PostCSS**: CSS transformation
-- **ESLint**: Code linting
+- **New episode:** add a JSON file under `src/content/episodes/`
+- **New guest:** add a JSON file under `src/content/guests/`
+- **New blog post:** add a Markdown file under `src/content/blog/` (frontmatter: `title`, `date`, `publishedAt`, `category`, `preview`)
 
-## 📝 License
+Schemas are enforced in `src/content/config.ts`.
 
-This project is open source and available under the MIT License.
+## 🔎 SEO notes
+
+- Canonical domain is **`iskanmagar.com`** (set once in `src/site.config.ts` / `astro.config.mjs`).
+- Per-page title/description/canonical/OG + JSON-LD are handled by `src/components/seo/Seo.astro`.
+- To regenerate the OG image after editing `scripts/og-source.svg`:
+  ```bash
+  node --input-type=module -e "import sharp from 'sharp';import{readFileSync}from'node:fs';await sharp(readFileSync('scripts/og-source.svg'),{density:144}).resize(1200,630).png().toFile('public/og/default.png')"
+  ```
+
+## 🚢 Deployment
+
+Push to `main` → GitHub Actions builds and deploys to Pages. In repo **Settings → Pages**, set **Source: GitHub Actions**. The `public/CNAME` file keeps the `iskanmagar.com` custom domain on every deploy.
 
 ## 👨‍💻 Author
 
-**Iskanmagar**
-
----
-
-Made with ❤️ and nostalgia for the retro-futuristic aesthetic
+Hosted by **Taha Bouhsine** — [tahabouhsine.com](https://www.tahabouhsine.com)

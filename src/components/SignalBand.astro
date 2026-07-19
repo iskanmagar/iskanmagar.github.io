@@ -1,0 +1,35 @@
+---
+/** Full-width call-to-action band closing out a page. */
+interface Props {
+  eyebrow?: string;
+  title: string;
+  primaryHref: string;
+  primaryText: string;
+  secondaryHref?: string;
+  secondaryText?: string;
+}
+const { eyebrow, title, primaryHref, primaryText, secondaryHref, secondaryText } = Astro.props;
+const externalAttrs = (href: string) =>
+  href.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {};
+---
+
+<section class="border-t border-ink-line bg-ink-soft/60 px-4 py-16 sm:py-20">
+  <div class="reveal mx-auto max-w-3xl text-center">
+    {eyebrow && <p class="eyebrow mb-6 justify-center">{eyebrow}</p>}
+    <h2 class="text-balance font-heading text-2xl font-bold leading-snug text-white sm:text-3xl">
+      {title}
+    </h2>
+    <div class="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
+      <a href={primaryHref} {...externalAttrs(primaryHref)} class="btn-signal w-full sm:w-auto">
+        {primaryText}
+      </a>
+      {
+        secondaryHref && secondaryText && (
+          <a href={secondaryHref} {...externalAttrs(secondaryHref)} class="btn-ghost w-full sm:w-auto">
+            {secondaryText}
+          </a>
+        )
+      }
+    </div>
+  </div>
+</section>

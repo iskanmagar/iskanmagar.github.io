@@ -1,0 +1,67 @@
+---
+import Base from '@/layouts/Base.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import EpisodeCard from '@/components/EpisodeCard.astro';
+import UpNextCard from '@/components/UpNextCard.astro';
+import SignalBand from '@/components/SignalBand.astro';
+import { getEpisodesLatestFirst } from '@/lib/episodes';
+import { SITE, SOCIAL } from '@/site.config';
+
+const episodes = await getEpisodesLatestFirst();
+const nextEpisodeNumber = String(episodes.length + 1).padStart(2, '0');
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'PodcastSeries',
+  name: 'Iskanmagar Podcast',
+  url: `${SITE.url}/episodes`,
+  webFeed: `${SITE.url}/rss.xml`,
+  numberOfEpisodes: episodes.length,
+};
+---
+
+<Base
+  title="Episodes"
+  description="Every recorded Iskanmagar transmission — conversations with builders from underrepresented, multilingual communities."
+  jsonLd={jsonLd}
+>
+  <div class="mx-auto max-w-7xl px-4 py-20">
+    <div class="reveal">
+      <SectionHeading title="Episodes" eyebrow="Recorded Transmissions" as="h1">
+        <a
+          slot="aside"
+          href={SOCIAL.youtube}
+          target="_blank"
+          rel="noreferrer"
+          class="link-underline font-mono text-xs uppercase tracking-widest"
+        >
+          Watch on YouTube ↗
+        </a>
+      </SectionHeading>
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {episodes.map((e) => <EpisodeCard episode={e.data} />)}
+        {
+          episodes.length < 3 && (
+            <UpNextCard
+              media
+              label="Next transmission"
+              title={`EP ${nextEpisodeNumber} · In production`}
+              note="New conversations with builders from the edge are being recorded."
+              href={SOCIAL.youtube}
+              linkText="Subscribe for the drop ↗"
+            />
+          )
+        }
+      </div>
+    </div>
+  </div>
+
+  <SignalBand
+    eyebrow="Never miss a transmission"
+    title="New episodes drop on YouTube first."
+    primaryHref={SOCIAL.youtube}
+    primaryText="▶ Subscribe on YouTube"
+    secondaryHref="/rss.xml"
+    secondaryText="RSS feed"
+  />
+</Base>

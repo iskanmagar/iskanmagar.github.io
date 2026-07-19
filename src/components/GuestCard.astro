@@ -1,0 +1,64 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  guest: CollectionEntry<'guests'>['data'];
+}
+const { guest } = Astro.props;
+---
+
+<article class="panel panel-hover ticks group relative p-6">
+  <p class="mb-3 font-mono text-[10px] tracking-signal text-gray-500">
+    GUEST {guest.episode?.padStart(2, '0') ?? '—'}
+  </p>
+
+  <!-- Lower-third chyron: broadcast-style name caption -->
+  <div class="chyron">
+    <h3 class="chyron-name transition-colors group-hover:text-signal">
+      {
+        guest.youtubeUrl ? (
+          // Stretched link — makes the whole card open the episode without nesting anchors.
+          <a
+            href={guest.youtubeUrl}
+            target="_blank"
+            rel="noreferrer"
+            class="after:absolute after:inset-0 after:content-['']"
+            aria-label={`Watch ${guest.name} on ${guest.episodeTitle ?? 'the episode'}`}
+          >
+            {guest.name}
+          </a>
+        ) : (
+          guest.name
+        )
+      }
+    </h3>
+    <p class="chyron-role">{guest.role}</p>
+    {
+      (guest.handle || guest.country) && (
+        <p class="mt-1 font-mono text-xs text-gray-400">
+          {[guest.handle, guest.country].filter(Boolean).join(' · ')}
+        </p>
+      )
+    }
+  </div>
+
+  <p class="mt-4 line-clamp-3 text-sm leading-relaxed text-gray-300">{guest.description}</p>
+
+  <div class="mt-4 flex items-center justify-between border-t border-ink-line pt-3 font-mono text-[11px]">
+    <span class="text-signal">EP {guest.episode} · {guest.episodeTitle}</span>
+    {guest.followers && <span class="text-gray-500">{guest.followers}</span>}
+  </div>
+
+  {
+    guest.companyUrl && (
+      <a
+        href={guest.companyUrl}
+        target="_blank"
+        rel="noreferrer"
+        class="relative z-10 mt-3 inline-block font-mono text-[11px] text-signal underline underline-offset-4 hover:text-signal-bright"
+      >
+        {guest.company ?? new URL(guest.companyUrl).hostname} ↗
+      </a>
+    )
+  }
+</article>

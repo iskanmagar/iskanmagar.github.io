@@ -1,0 +1,287 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    /* SMPTE test-signal bars — referenced by cards, dividers, footer. */
+    --bars: linear-gradient(
+      90deg,
+      #c9ced6 0 14.285%,
+      #ffb020 14.285% 28.57%,
+      #2ee6d6 28.57% 42.855%,
+      #48e06a 42.855% 57.14%,
+      #ff4fa3 57.14% 71.425%,
+      #ef4444 71.425% 85.71%,
+      #3b82f6 85.71% 100%
+    );
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: theme('colors.ink.DEFAULT');
+  }
+
+  body {
+    @apply bg-ink text-gray-300 font-body antialiased;
+    margin: 0;
+    min-height: 100vh;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Comfortable reading rhythm for long-form copy */
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Accessible focus ring across the site */
+  :where(a, button, summary, [tabindex]):focus-visible {
+    outline: 2px solid theme('colors.signal.DEFAULT');
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+
+  ::selection {
+    background: theme('colors.signal.DEFAULT');
+    color: theme('colors.ink.DEFAULT');
+  }
+}
+
+@layer components {
+  /* ── Broadcast panel ─────────────────────────────────────────────
+     Unifies episode / guest / blog cards. On hover the card "tunes in"
+     the SMPTE test signal across its top edge — the site's signature. */
+  .panel {
+    @apply relative border border-ink-line shadow-panel transition-[transform,border-color,box-shadow,background-size] duration-300;
+    background-color: rgb(16 19 24 / 0.72);
+    background-image: var(--bars);
+    background-repeat: no-repeat;
+    background-position: top left;
+    background-size: 0% 2px;
+  }
+  .panel-hover:hover {
+    @apply border-signal/60 shadow-glow;
+    background-size: 100% 2px;
+    transform: translateY(-3px);
+  }
+  .panel-hover:focus-within {
+    @apply border-signal/60;
+    background-size: 100% 2px;
+  }
+
+  /* Corner registration ticks — quiet secondary detail */
+  .ticks::before,
+  .ticks::after {
+    content: '';
+    @apply pointer-events-none absolute h-2.5 w-2.5 border-signal/40 transition-colors;
+  }
+  .ticks::before {
+    @apply left-1.5 top-1.5 border-l border-t;
+  }
+  .ticks::after {
+    @apply bottom-1.5 right-1.5 border-b border-r;
+  }
+  .panel-hover:hover.ticks::before,
+  .panel-hover:hover.ticks::after {
+    @apply border-signal;
+  }
+
+  /* ── Lower-third chyron ──────────────────────────────────────────
+     The way broadcast TV captions a person on screen: bright colored
+     edge, bold name, small role beneath. Used for guests & hosts. */
+  .chyron {
+    @apply relative border-l-[3px] border-signal pl-3;
+  }
+  .chyron-magenta {
+    @apply border-magenta;
+  }
+  .chyron-name {
+    @apply font-heading text-xl font-bold leading-tight text-white;
+  }
+  .chyron-role {
+    @apply mt-0.5 font-mono text-[11px] uppercase tracking-wide text-magenta-bright;
+  }
+
+  /* ── Labels ──────────────────────────────────────────────────────
+     Eyebrow with a leading signal tick. */
+  .eyebrow {
+    @apply flex items-center gap-2 font-mono text-xs uppercase tracking-chyron text-gray-500;
+  }
+  .eyebrow::before {
+    content: '';
+    @apply inline-block h-1.5 w-1.5 flex-none bg-signal;
+  }
+
+  /* Thin SMPTE bar divider — section headers & footer */
+  .bars {
+    background-image: var(--bars);
+  }
+  .bar-divider {
+    @apply h-[3px] w-full bg-[image:var(--bars)] opacity-80;
+  }
+
+  /* ── Buttons ─────────────────────────────────────────────────────── */
+  .btn-signal {
+    @apply relative inline-flex items-center justify-center gap-2 bg-signal px-8 py-4 font-mono text-sm font-bold uppercase tracking-widest text-ink transition-all duration-200 hover:-translate-y-0.5 hover:bg-signal-bright hover:shadow-glow-sm;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 border border-signal/60 bg-signal/[0.02] px-8 py-4 font-mono text-sm font-bold uppercase tracking-widest text-signal transition-all duration-200 hover:-translate-y-0.5 hover:border-signal hover:bg-signal hover:text-ink;
+  }
+
+  /* Animated underline for inline links */
+  .link-underline {
+    @apply relative text-signal transition-colors hover:text-signal-bright;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    transition: background-size 0.25s ease, color 0.2s ease;
+  }
+  .link-underline:hover {
+    background-size: 100% 1px;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  /* CRT chromatic aberration — magenta/cyan fringing on display type */
+  .text-crt {
+    text-shadow:
+      -1.5px 0 rgba(255, 79, 163, 0.45),
+      1.5px 0 rgba(46, 230, 214, 0.45);
+  }
+
+  /* CRT power-on: the screen snaps open from a bright horizontal line */
+  .crt-on {
+    transform-origin: center;
+    animation: crt-on 0.7s cubic-bezier(0.23, 1, 0.32, 1) 0.15s both;
+  }
+
+  /* Monitor housing for the control-room wall */
+  .monitor {
+    @apply relative rounded-md border border-ink-line bg-ink-soft p-1.5 shadow-panel;
+  }
+  .monitor-screen {
+    @apply relative overflow-hidden rounded-sm bg-black;
+  }
+  .monitor-label {
+    @apply flex items-center justify-between px-2 pt-2 font-mono text-[10px] uppercase tracking-[0.25em] text-gray-600;
+  }
+
+  /* Broadcast signal-strength meter */
+  .meter {
+    @apply flex items-end gap-[3px];
+  }
+  .meter span {
+    @apply w-[3px] rounded-[1px] bg-signal/80;
+    transform-origin: bottom;
+    animation: meter 1.4s ease-in-out infinite;
+  }
+  .meter span:nth-child(1) { height: 6px; animation-delay: 0s; }
+  .meter span:nth-child(2) { height: 9px; animation-delay: 0.18s; }
+  .meter span:nth-child(3) { height: 12px; animation-delay: 0.36s; }
+  .meter span:nth-child(4) { height: 15px; animation-delay: 0.54s; }
+  .meter span:nth-child(5) { height: 18px; animation-delay: 0.72s; }
+
+  /* Staged boot sequence for hero copy */
+  .boot {
+    animation: boot 0.6s ease-out both;
+  }
+  .boot-1 { animation-delay: 0.4s; }
+  .boot-2 { animation-delay: 0.55s; }
+  .boot-3 { animation-delay: 0.7s; }
+  .boot-4 { animation-delay: 0.85s; }
+  .boot-5 { animation-delay: 1s; }
+  .boot-6 { animation-delay: 1.15s; }
+  .bg-grid {
+    background-image: theme('backgroundImage.grid-faint');
+    background-size: 46px 46px;
+  }
+  /* Ambient Tifinagh watermark */
+  .tifinagh-mark {
+    @apply pointer-events-none select-none font-mono text-signal/70;
+    letter-spacing: theme('letterSpacing.chyron');
+  }
+
+  /* Progressive scroll-reveal: sections fade + rise as they enter the
+     viewport. Scroll-driven animation, zero JS; browsers without
+     animation-timeline support simply render the content as-is. */
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+  }
+}
+
+@keyframes reveal-in {
+  from {
+    opacity: 0.15;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes crt-on {
+  0% {
+    transform: scaleY(0.01);
+    filter: brightness(6);
+  }
+  45% {
+    transform: scaleY(0.03);
+    filter: brightness(4);
+  }
+  100% {
+    transform: scaleY(1);
+    filter: brightness(1);
+  }
+}
+
+@keyframes boot {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes meter {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .panel-hover:hover {
+    transform: none;
+  }
+  /* Scroll-timeline animations ignore duration overrides — disable outright */
+  .reveal {
+    animation: none;
+  }
+}

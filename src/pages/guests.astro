@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import GuestCard from '@/components/GuestCard.astro';
+import UpNextCard from '@/components/UpNextCard.astro';
+import SignalBand from '@/components/SignalBand.astro';
+import { SOCIAL } from '@/site.config';
+
+const guests = await getCollection('guests');
+
+const jsonLd = guests.map((g) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: g.data.name,
+  description: g.data.description,
+  ...(g.data.companyUrl
+    ? { worksFor: { '@type': 'Organization', name: g.data.company, url: g.data.companyUrl } }
+    : {}),
+  ...(g.data.country ? { nationality: g.data.country } : {}),
+}));
+---
+
+<Base
+  title="Guests"
+  description="Featured signals — the builders, founders, and creators who have joined Iskanmagar transmissions."
+  canonicalPath="/guests"
+  jsonLd={jsonLd}
+>
+  <div class="mx-auto max-w-7xl px-4 py-20">
+    <div class="reveal">
+      <SectionHeading title="Featured Guests" eyebrow="Featured Signals" marker="◎" as="h1" />
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {guests.map((g) => <GuestCard guest={g.data} />)}
+        {
+          guests.length < 3 && (
+            <UpNextCard
+              label="Future signal"
+              title="Your story could be next"
+              note="Know a builder from an underrepresented community with a story worth broadcasting? Send us a signal."
+              href={SOCIAL.twitter}
+              linkText="Suggest a guest ↗"
+            />
+          )
+        }
+      </div>
+    </div>
+  </div>
+
+  <SignalBand
+    eyebrow="Open frequency"
+    title="Every guest started as a signal someone amplified."
+    primaryHref={SOCIAL.twitter}
+    primaryText="Suggest a guest"
+    secondaryHref="/episodes"
+    secondaryText="Browse episodes"
+  />
+</Base>

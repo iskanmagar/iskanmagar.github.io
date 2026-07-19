@@ -2,166 +2,69 @@
 
 ## Quick Start
 
-### First Time Setup
-
-1. **Install Node.js**: Make sure you have Node.js 18+ installed
-2. **Install Dependencies**:
-   ```bash
-   npm install
-   ```
-
-### Development
-
-Start the development server:
 ```bash
-npm run dev
+npm install
+npm run dev        # http://localhost:4321
 ```
-The site will be available at http://localhost:5173
 
-### Building
+## Scripts
 
-Create a production build:
+- `npm run dev` — dev server with hot reload
+- `npm run build` — production build into `dist/`
+- `npm run preview` — preview the production build
+
+## Architecture
+
+Astro static site. **No client framework** — the only browser JS is a ~15-line inline
+script for the mobile-menu toggle in `src/components/Navbar.astro`.
+
+### Key files
+
+- **`src/site.config.ts`** — `SITE` (name, url, description), `SOCIAL` links, `NAV`. Single source of truth.
+- **`src/layouts/Base.astro`** — `<html>` shell, includes `Seo` + `Navbar` + `Footer`, loads fonts & global CSS.
+- **`src/components/seo/Seo.astro`** — per-page title/description/canonical/OG/Twitter/JSON-LD. All URLs derive from `SITE.url`.
+- **`src/content/config.ts`** — zod schemas for the `episodes`, `guests`, `hosts`, `blog` collections.
+- **`src/styles/global.css`** — Tailwind layers + brand primitives (`.panel`, `.btn-signal`, `.btn-ghost`, `.eyebrow`, `.ticks`).
+- **`tailwind.config.mjs`** — brand color tokens (`ink`, `signal`, `magenta`, `amber`, `phosphor`), fonts, keyframes.
+
+### Pages / routes (`src/pages/`)
+
+`index.astro`, `about.astro`, `guests.astro`, `episodes/index.astro`,
+`blog/index.astro`, `blog/[slug].astro`, `404.astro`, `rss.xml.ts`.
+
+## Common tasks
+
+### Add content
+
+- **Episode:** new `.json` in `src/content/episodes/` (fields per `config.ts`).
+- **Guest:** new `.json` in `src/content/guests/`.
+- **Blog post:** new `.md` in `src/content/blog/` with frontmatter `title`, `date`, `publishedAt`, `category`, `preview`. Its URL is `/blog/<filename>/` and it's added to the sitemap + RSS automatically.
+
+### Change brand colors
+
+Edit tokens in `tailwind.config.mjs` under `theme.extend.colors` — components reference the semantic names (`text-signal`, `border-magenta`, `bg-ink`), not raw Tailwind palette colors.
+
+### Regenerate the OG image
+
+Edit `scripts/og-source.svg`, then:
+
 ```bash
-npm run build
+node --input-type=module -e "import sharp from 'sharp';import{readFileSync}from'node:fs';await sharp(readFileSync('scripts/og-source.svg'),{density:144}).resize(1200,630).png().toFile('public/og/default.png')"
 ```
 
-Preview the production build:
-```bash
-npm run preview
-```
+### Change social links / handles
 
-## Available Scripts
-
-- `npm run dev` - Start development server with hot reload
-- `npm run build` - Create optimized production build in `dist/` folder
-- `npm run preview` - Preview the production build locally
-- `npm run lint` - Run ESLint to check code quality
-
-## Project Architecture
-
-### Key Files
-
-- **`index.html`**: HTML entry point
-- **`src/main.jsx`**: JavaScript entry point, renders React app
-- **`src/App.jsx`**: Root React component
-- **`src/components/LandingPage.jsx`**: Main landing page with retro TV design
-- **`src/index.css`**: Global styles with Tailwind directives
-
-### Styling
-
-This project uses **Tailwind CSS** for styling. Key concepts:
-
-- Utility-first classes (e.g., `bg-black`, `text-white`, `flex`)
-- Responsive prefixes (e.g., `sm:`, `md:`, `lg:`)
-- Custom animations defined in `tailwind.config.js`
-
-### Animations
-
-Animations are powered by **Framer Motion**:
-
-```jsx
-import { motion } from "framer-motion";
-
-<motion.div
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  transition={{ duration: 1 }}
->
-  Content
-</motion.div>
-```
-
-## Adding New Components
-
-1. Create a new file in `src/components/`
-2. Export your component as default
-3. Import and use it in `App.jsx` or other components
-
-Example:
-```jsx
-// src/components/MyComponent.jsx
-export default function MyComponent() {
-  return <div>Hello!</div>
-}
-
-// src/App.jsx
-import MyComponent from './components/MyComponent'
-```
+Edit `SOCIAL` in `src/site.config.ts` — used by Navbar, Footer, and JSON-LD.
 
 ## Deployment
 
-### Automatic Deployment (Recommended)
-
-The project uses GitHub Actions for automatic deployment:
-
-1. Push changes to the `main` branch
-2. GitHub Actions will automatically build and deploy to GitHub Pages
-3. Check deployment status in the "Actions" tab of your repository
-
-### First Time Setup
-
-1. Go to repository Settings → Pages
-2. Under "Source", select "GitHub Actions"
-3. Push to trigger the first deployment
-
-### Manual Deployment
-
-If you need to deploy manually:
-```bash
-npm run build
-# Then upload the dist/ folder to your hosting service
-```
-
-## Common Tasks
-
-### Changing Colors
-
-Edit the Tailwind classes in `src/components/LandingPage.jsx`:
-- `bg-gradient-to-b from-black via-gray-900 to-black` - Background gradient
-- `from-cyan-400 via-pink-500 to-yellow-400` - Text gradient
-
-### Modifying Animations
-
-Edit the Framer Motion props in components:
-- `initial` - Starting state
-- `animate` - End state
-- `transition` - Animation timing and easing
-
-### Adding Pages/Routes
-
-1. Install React Router: `npm install react-router-dom`
-2. Set up routes in `App.jsx`
-3. Create page components in `src/pages/`
-
-## Troubleshooting
-
-### Port Already in Use
-
-If port 5173 is busy:
-```bash
-npm run dev -- --port 3000
-```
-
-### Build Errors
-
-Clear cache and reinstall:
-```bash
-rm -rf node_modules package-lock.json
-npm install
-```
-
-### Hot Reload Not Working
-
-Restart the dev server:
-```bash
-# Press Ctrl+C to stop
-npm run dev
-```
+Push to `main` → GitHub Actions (`.github/workflows/deploy.yml`) builds and deploys to
+GitHub Pages. Repo **Settings → Pages → Source: GitHub Actions**. `public/CNAME` keeps the
+`iskanmagar.com` custom domain across deploys.
 
 ## Resources
 
-- [React Documentation](https://react.dev)
-- [Vite Documentation](https://vitejs.dev)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [Framer Motion Documentation](https://www.framer.com/motion/)
-- [GitHub Pages Documentation](https://docs.github.com/en/pages)
+- [Astro Docs](https://docs.astro.build)
+- [Astro Content Collections](https://docs.astro.build/en/guides/content-collections/)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+- [GitHub Pages](https://docs.github.com/en/pages)

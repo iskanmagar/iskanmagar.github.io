@@ -1,0 +1,45 @@
+---
+/**
+ * Placeholder card for grids that are still filling up — reads as a channel
+ * awaiting signal rather than an empty slot. Dashed border marks it as
+ * not-yet-content; optional static-screen media block for episode grids.
+ */
+interface Props {
+  label: string;
+  title: string;
+  note?: string;
+  href?: string;
+  linkText?: string;
+  media?: boolean;
+}
+const { label, title, note, href, linkText, media = false } = Astro.props;
+const external = href?.startsWith('http');
+---
+
+<article class="panel ticks border-dashed p-5 opacity-90">
+  {
+    media && (
+      <div class="relative mb-4 aspect-video overflow-hidden border border-ink-line bg-black" aria-hidden="true">
+        <div class="absolute inset-0 animate-grain bg-grain opacity-40" />
+        <div class="absolute inset-0 bg-scanlines opacity-40" />
+        <div class="absolute inset-0 flex items-center justify-center">
+          <span class="font-mono text-[11px] tracking-signal text-gray-500">AWAITING SIGNAL</span>
+        </div>
+      </div>
+    )
+  }
+  <p class="eyebrow mb-2 !text-[10px]">{label}</p>
+  <h3 class="font-heading text-lg font-bold text-gray-300">{title}</h3>
+  {note && <p class="mt-2 text-sm leading-relaxed text-gray-500">{note}</p>}
+  {
+    href && linkText && (
+      <a
+        href={href}
+        {...external ? { target: '_blank', rel: 'noreferrer' } : {}}
+        class="link-underline mt-4 inline-block font-mono text-xs uppercase tracking-wider"
+      >
+        {linkText}
+      </a>
+    )
+  }
+</article>

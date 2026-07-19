@@ -1,0 +1,12 @@
+{
+  "name": "Taha Bouhsine",
+  "role": "Host",
+  "title": "Co-founder of azetta.ai",
+  "bio": "Host of Iskanmagar transmissions. Co-founder of azetta.ai, previous founder of the research community ML Nomads, and AI Google Developer Expert helping builders from underrepresented communities learn and create at the edge of AI.",
+  "more": "AI Google Developer Expert passionate about democratizing AI and ML education. Previous founder of ML Nomads, a global research community bringing together researchers and practitioners from underrepresented regions. Currently building azetta.ai to make AI accessible and practical for builders everywhere.",
+  "website": "https://www.tahabouhsine.com",
+  "twitter": "https://twitter.com/tahabouhsine",
+  "image": "taha-host.jpg",
+  "tags": ["AI GDE", "Community Builder", "Founder"],
+  "order": 1
+}
