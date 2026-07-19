@@ -72,6 +72,9 @@ const channels = episodes.map((e) => ({
                 }
 
                 <div class="static-burst" data-static aria-hidden="true"></div>
+                <!-- CRT picture artifacts: phosphor grille + rolling brightness bar -->
+                <div class="fx-phosphor" aria-hidden="true"></div>
+                <div class="fx-rollbar" aria-hidden="true"></div>
                 <div class="screen-scanlines" aria-hidden="true"></div>
                 <div class="glass" aria-hidden="true"></div>
                 <p class="osd font-display" data-osd aria-hidden="true">CH 01</p>
@@ -259,6 +262,14 @@ const channels = episodes.map((e) => ({
     transform-style: preserve-3d;
     transform: rotateY(-24deg) rotateX(8deg);
     transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+    /* A 3D-transformed element's transparent border box still hit-tests and,
+       being coplanar with the cabinet, can swallow clicks meant for the
+       controls. Make the whole rig click-transparent, then re-enable the
+       actual controls below. */
+    pointer-events: none;
+  }
+  .tv-rig :is(button, iframe) {
+    pointer-events: auto;
   }
   .tv-stage:hover .tv-rig {
     transform: rotateY(-10deg) rotateX(4deg);
@@ -439,6 +450,77 @@ const channels = episodes.map((e) => ({
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /* CRT picture: overscan zoom, hot colors, soft RGB convergence error */
+    transform: scale(1.04);
+    filter: saturate(1.25) contrast(1.12) brightness(0.96)
+      drop-shadow(1.5px 0 0 rgba(255, 60, 120, 0.2))
+      drop-shadow(-1.5px 0 0 rgba(46, 230, 214, 0.2));
+  }
+  /* Occasional tracking wobble, like a set losing vertical hold */
+  .channel.active[data-kind='ep'] {
+    animation: fx-jitter 7s steps(1) infinite;
+  }
+  .channel.playing {
+    animation: none; /* steady picture while the real player runs */
+  }
+  @keyframes fx-jitter {
+    0%,
+    90% {
+      transform: none;
+    }
+    91% {
+      transform: translateY(2px);
+    }
+    92.5% {
+      transform: translate(1px, -1px);
+    }
+    94% {
+      transform: none;
+    }
+    97% {
+      transform: translateX(-1.5px);
+    }
+    98% {
+      transform: none;
+    }
+  }
+
+  /* Aperture-grille phosphor stripes over the whole picture */
+  .fx-phosphor {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      90deg,
+      rgba(255, 0, 60, 0.05) 0 1px,
+      rgba(0, 255, 120, 0.04) 1px 2px,
+      rgba(0, 80, 255, 0.05) 2px 3px
+    );
+  }
+  /* Slow rolling brightness bar drifting down the tube */
+  .fx-rollbar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 30%;
+    z-index: 4;
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.06) 50%, transparent);
+    animation: fx-roll 7s linear infinite;
+  }
+  @keyframes fx-roll {
+    from {
+      transform: translateY(-120%);
+    }
+    to {
+      transform: translateY(460%);
+    }
+  }
+  .tv-off .fx-phosphor,
+  .tv-off .fx-rollbar {
+    visibility: hidden;
   }
   .channel :global(iframe) {
     position: absolute;
